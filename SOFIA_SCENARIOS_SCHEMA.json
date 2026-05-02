@@ -1,0 +1,161 @@
+{
+  "_comment": "S.O.F.I.A. — Scenario Schema v1.0 — Contrat frontend/backend/IA",
+  "_version": "1.0",
+  "_author": "Vladimir Casapciuc @Vlad8Mir",
+
+  "scenario": {
+    "id": "uuid",
+    "domain": "security | cybersecurity | politics | relationships | finance | leadership | health | parenting | custom",
+    "difficulty": "1-5 (1=débutant, 3=intermédiaire, 5=expert)",
+    "is_premium": false,
+    "is_published": true,
+    "org_id": "null pour public, uuid pour organisation",
+    "translations": {
+      "fr": {
+        "domain_label": "SÉCURITÉ",
+        "text": "Texte du scénario en français (2-4 phrases, situation concrète)",
+        "insight": "La leçon clé à retenir (2-3 phrases)",
+        "steps": {
+          "S": {
+            "question": "Quelle est la vraie situation ?",
+            "options": ["Option A", "Option B (correct)", "Option C"],
+            "correct_index": 1,
+            "analyses": [
+              "Analyse si A choisi — pourquoi c'est inexact",
+              "Analyse si B choisi — pourquoi c'est correct ✓",
+              "Analyse si C choisi — pourquoi c'est inexact"
+            ]
+          },
+          "O": { "...": "même structure" },
+          "F": { "...": "même structure" },
+          "I": { "...": "même structure" },
+          "A": { "...": "même structure" }
+        }
+      },
+      "en": { "...": "même structure" },
+      "ro": { "...": "même structure" },
+      "ru": { "...": "même structure" },
+      "it": { "...": "même structure" }
+    }
+  },
+
+  "scoring": {
+    "per_correct_step": 20,
+    "total_max": 100,
+    "levels": {
+      "0-39": "RÉACTIF",
+      "40-59": "FONCTIONNEL",
+      "60-79": "STRATÉGIQUE",
+      "80-99": "AVANCÉ",
+      "100": "MAÎTRISE"
+    }
+  },
+
+  "domains": {
+    "existing": [
+      "security", "cybersecurity", "politics", "relationships",
+      "finance", "leadership", "health", "parenting"
+    ],
+    "planned": [
+      "environment", "ai_ethics", "negotiation", "sport_mental",
+      "entrepreneurship", "crisis_management"
+    ],
+    "b2b_custom": "Domain créé par une organisation pour ses propres besoins"
+  },
+
+  "ai_generation_metadata": {
+    "generated_by": "claude-sonnet-4-20250514",
+    "prompt_version": "1.0",
+    "validated_by": "human_admin",
+    "quality_score": "0-100",
+    "generation_date": "ISO8601"
+  },
+
+  "example_scenario": {
+    "id": "550e8400-e29b-41d4-a716-446655440001",
+    "domain": "security",
+    "difficulty": 2,
+    "is_premium": false,
+    "is_published": true,
+    "org_id": null,
+    "translations": {
+      "fr": {
+        "domain_label": "SÉCURITÉ",
+        "text": "Tu arrives dans un café bondé. Ton téléphone est sur la table. Tu dois commander — 2 minutes d'absence. Plusieurs inconnus sont autour.",
+        "insight": "La meilleure stratégie élimine le risque à la source. Tu ne contrôles pas les autres — mais tu contrôles les conditions que tu crées.",
+        "steps": {
+          "S": {
+            "question": "Quelle est la vraie situation ?",
+            "options": [
+              "Café calme, rien ne se passera",
+              "Objet visible + espace public + absence = risque",
+              "Je reviens vite, pas de souci"
+            ],
+            "correct_index": 1,
+            "analyses": [
+              "Biais confort — ignore les faits réels",
+              "Lecture neutre et complète ✓",
+              "Biais temporel — 2 min n'est pas anodin"
+            ]
+          },
+          "O": {
+            "question": "Quelles options as-tu ?",
+            "options": [
+              "Laisser le téléphone",
+              "Le prendre avec toi",
+              "Le cacher sous ta veste"
+            ],
+            "correct_index": 1,
+            "analyses": [
+              "Risque max — objet exposé",
+              "Stratégie dominante ✓",
+              "Réduction partielle — non fiable"
+            ]
+          },
+          "F": {
+            "question": "Qu'est-ce qui va probablement arriver ?",
+            "options": [
+              "Rien — les gens respectent",
+              "Risque faible mais réel",
+              "Quelqu'un va certainement le prendre"
+            ],
+            "correct_index": 1,
+            "analyses": [
+              "Naïf — ignore la réalité humaine",
+              "Calibré, ni parano ni naïf ✓",
+              "Pessimiste — surévalue le risque"
+            ]
+          },
+          "I": {
+            "question": "Pourquoi quelqu'un pourrait agir ?",
+            "options": [
+              "Personne ne veut les affaires des autres",
+              "Opportunité + faible risque = incitation",
+              "Les gens sont généralement honnêtes"
+            ],
+            "correct_index": 1,
+            "analyses": [
+              "Ignore la diversité humaine",
+              "Modèle correct des incitations ✓",
+              "Vrai en moyenne mais insuffisant"
+            ]
+          },
+          "A": {
+            "question": "Meilleure action ?",
+            "options": [
+              "Laisser et espérer",
+              "Prendre le téléphone avec toi",
+              "Demander à un voisin"
+            ],
+            "correct_index": 1,
+            "analyses": [
+              "Stratégie faible — dépend des autres",
+              "Optimal — tu contrôles la variable ✓",
+              "Mieux que A mais dépend d'un inconnu"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

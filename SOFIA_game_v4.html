@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S.O.F.I.A. — Strategic Decision Game by @Vlad8Mir</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--g:#00ff88;--g2:#00cc66;--g3:#003d1f;--bg:#050f09;--bg2:#091a0f;--bg3:#0d2414;--txt:#c8ffd8;--txt2:#6bcc99;--txt3:#2d6644;--border:#1a3d25;--border2:#2a6644;--danger:#ff4455;--gold:#ffd700;--font:'Share Tech Mono',monospace;--font-h:'Orbitron',monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--txt);font-family:var(--font);font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,255,136,.012) 2px,rgba(0,255,136,.012) 4px);pointer-events:none;z-index:9999}
+.app{max-width:660px;margin:0 auto;padding:1.25rem 1rem 4rem}
+.screen{display:none}.screen.active{display:block}
+.lang-bar{display:flex;gap:5px;margin-bottom:1.25rem;flex-wrap:wrap}
+.lb{padding:3px 12px;font-family:var(--font);font-size:11px;border:1px solid var(--border);border-radius:2px;cursor:pointer;background:transparent;color:var(--txt3);letter-spacing:2px;transition:all .15s}
+.lb:hover{border-color:var(--g2);color:var(--g2)}.lb.active{background:var(--g3);border-color:var(--g);color:var(--g);font-weight:700}
+.nav-tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:1.5rem}
+.nt{flex:1;padding:.5rem;font-family:var(--font);font-size:11px;letter-spacing:1px;border:none;border-bottom:2px solid transparent;background:transparent;color:var(--txt3);cursor:pointer;transition:all .15s;text-align:center}
+.nt:hover{color:var(--txt2)}.nt.active{color:var(--g);border-bottom-color:var(--g)}
+.logo{font-family:var(--font-h);font-size:clamp(22px,7vw,38px);font-weight:900;color:var(--g);letter-spacing:6px;text-shadow:0 0 25px rgba(0,255,136,.35);line-height:1;margin-bottom:3px}
+.logo-sub{font-size:10px;color:var(--txt3);letter-spacing:3px;margin-bottom:1.25rem}
+.vtag{font-size:9px;color:var(--txt3);letter-spacing:2px;margin-bottom:1.5rem}
+.sofia-grid{border:1px solid var(--border);border-radius:3px;overflow:hidden;margin-bottom:1.25rem}
+.sr{display:flex;align-items:baseline;gap:10px;padding:.45rem .85rem;border-bottom:1px solid var(--border);transition:background .15s}
+.sr:last-child{border-bottom:none}.sr:hover{background:var(--bg2)}
+.sl{font-family:var(--font-h);font-size:15px;font-weight:700;color:var(--g);min-width:20px}
+.sw{font-size:12px;font-weight:700;color:var(--txt);min-width:95px;letter-spacing:1px}
+.sd{font-size:11px;color:var(--txt2)}
+.stats-bar{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:1.25rem}
+.sb-card{background:var(--bg2);border:1px solid var(--border);border-radius:3px;padding:.6rem;text-align:center}
+.sb-n{font-family:var(--font-h);font-size:18px;font-weight:700;color:var(--g)}
+.sb-l{font-size:9px;color:var(--txt3);letter-spacing:2px;margin-top:2px}
+.badges-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1.25rem}
+.badge{display:flex;flex-direction:column;align-items:center;gap:3px;padding:.5rem .6rem;border:1px solid var(--border);border-radius:3px;min-width:60px;transition:all .2s}
+.badge.unlocked{border-color:var(--g2);background:var(--g3)}.badge.locked{opacity:.35}
+.badge-icon{font-size:18px}.badge-name{font-size:9px;color:var(--txt2);letter-spacing:1px;text-align:center}
+.challenge-box{border:1px solid var(--gold);border-radius:3px;padding:.75rem 1rem;margin-bottom:1.25rem;cursor:pointer;transition:background .15s}
+.challenge-box:hover{background:rgba(255,215,0,.05)}
+.chal-title{font-size:10px;color:var(--gold);letter-spacing:3px;margin-bottom:4px}
+.chal-text{font-size:13px;color:var(--txt);line-height:1.5}
+.sec-lbl{font-size:10px;color:var(--txt3);letter-spacing:3px;margin-bottom:.65rem}
+.domain-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:6px;margin-bottom:1.25rem}
+.dc{padding:.5rem .75rem;border:1px solid var(--border);border-radius:2px;cursor:pointer;font-size:11px;color:var(--txt2);letter-spacing:1px;text-align:center;transition:all .15s}
+.dc:hover{border-color:var(--g2);color:var(--g)}.dc.sel{border-color:var(--g);color:var(--g);background:var(--g3)}
+.btn{width:100%;padding:.7rem 1rem;background:transparent;border:1px solid var(--border2);border-radius:2px;font-family:var(--font);font-size:13px;color:var(--g);cursor:pointer;letter-spacing:2px;transition:all .15s;display:block;text-align:center;margin-top:7px;text-decoration:none}
+.btn:hover{background:var(--g3);border-color:var(--g);text-shadow:0 0 8px var(--g)}.btn:disabled{opacity:.3;cursor:not-allowed}
+.btn-gold{border-color:var(--gold);color:var(--gold)}.btn-gold:hover{background:rgba(255,215,0,.08)}
+.btn-danger{border-color:var(--danger);color:var(--danger)}
+.btn-row{display:flex;gap:7px;margin-top:7px}.btn-row .btn{margin-top:0}
+.btn-sm{padding:.4rem .75rem;font-size:11px;letter-spacing:1px}
+.domain-tag{display:inline-block;font-size:10px;padding:2px 10px;border:1px solid var(--border2);border-radius:2px;color:var(--g2);letter-spacing:2px;margin-bottom:.65rem}
+.sc-num{font-size:10px;color:var(--txt3);letter-spacing:2px;margin-bottom:.4rem}
+.sc-box{background:var(--bg2);border:1px solid var(--border);border-radius:3px;padding:.9rem 1rem;margin-bottom:1.1rem;font-size:14px;line-height:1.8;color:var(--txt)}
+.progress-bar{display:flex;gap:5px;margin-bottom:1.1rem}
+.ps{flex:1;height:3px;border-radius:1px;background:var(--bg3);transition:background .3s}
+.ps.done{background:var(--g)}.ps.cur{background:var(--g2)}
+.step-hd{font-family:var(--font-h);font-size:13px;color:var(--g);margin-bottom:2px;letter-spacing:2px}
+.step-q{font-size:11px;color:var(--txt2);margin-bottom:.8rem;letter-spacing:1px}
+.opts{display:flex;flex-direction:column;gap:7px;margin-bottom:1.1rem}
+.opt{display:flex;align-items:flex-start;gap:10px;padding:.7rem .85rem;background:var(--bg);border:1px solid var(--border);border-radius:2px;cursor:pointer;text-align:left;font-family:var(--font);font-size:13px;color:var(--txt2);transition:all .15s;line-height:1.5;width:100%}
+.opt:hover{border-color:var(--g2);color:var(--txt);background:var(--bg2)}.opt.sel{border-color:var(--g);color:var(--g);background:var(--g3)}
+.opt-k{font-family:var(--font-h);font-size:11px;font-weight:700;color:var(--txt3);min-width:16px;margin-top:1px}.opt.sel .opt-k{color:var(--g2)}
+.score-n{font-family:var(--font-h);font-size:clamp(40px,10vw,60px);font-weight:900;color:var(--g);text-shadow:0 0 30px rgba(0,255,136,.4);line-height:1;margin:.4rem 0 3px}
+.score-lv{font-size:10px;color:var(--txt2);letter-spacing:3px;margin-bottom:1.1rem}
+.analysis{display:flex;flex-direction:column;gap:5px;margin-bottom:1.1rem}
+.ar{display:flex;align-items:flex-start;gap:8px;padding:.55rem .85rem;background:var(--bg2);border-radius:2px;font-size:12px}
+.al{font-family:var(--font-h);font-size:11px;font-weight:700;min-width:14px;padding-top:1px}
+.al.ok{color:var(--g)}.al.bad{color:var(--danger)}
+.at{flex:1;color:var(--txt2);line-height:1.5}
+.ap{font-family:var(--font-h);font-size:11px;white-space:nowrap}
+.ap.ok{color:var(--g)}.ap.bad{color:var(--danger)}
+.insight{border-left:2px solid var(--g3);padding:.7rem .9rem;margin-bottom:1.1rem;font-size:13px;color:var(--txt2);line-height:1.7;background:var(--bg2);border-radius:0 3px 3px 0}
+.new-bdg{border:1px solid var(--gold);border-radius:3px;padding:.6rem .9rem;margin-bottom:1.1rem;background:rgba(255,215,0,.05)}
+.new-bdg-t{font-size:9px;color:var(--gold);letter-spacing:3px;margin-bottom:4px}
+.new-bdg-c{font-size:13px;color:var(--txt)}
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:1.1rem}
+.sc2{background:var(--bg2);border:1px solid var(--border);border-radius:3px;padding:.75rem;text-align:center}
+.sc2-n{font-family:var(--font-h);font-size:20px;font-weight:700;color:var(--g)}
+.sc2-l{font-size:9px;color:var(--txt3);letter-spacing:2px;margin-top:3px}
+.dom-row{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.dom-n{font-size:11px;color:var(--txt2);min-width:115px;letter-spacing:1px}
+.dom-bg{flex:1;height:3px;background:var(--bg3);border-radius:1px}
+.dom-fill{height:3px;border-radius:1px;background:var(--g);transition:width .6s}
+.dom-pct{font-size:11px;color:var(--txt3);min-width:28px;text-align:right}
+.ct-hd{font-family:var(--font-h);font-size:16px;color:var(--g);letter-spacing:3px;margin-bottom:.4rem}
+.ct-sub{font-size:11px;color:var(--txt2);margin-bottom:1.25rem;line-height:1.6}
+.sp-box{border:1px dashed var(--gold);border-radius:3px;padding:1rem;margin-bottom:1.25rem;text-align:center}
+.sp-title{font-size:9px;color:var(--gold);letter-spacing:3px;margin-bottom:.5rem}
+.sp-desc{font-size:12px;color:var(--txt2);margin-bottom:.75rem;line-height:1.7;white-space:pre-line}
+.sp-price{font-family:var(--font-h);font-size:18px;color:var(--gold);margin-bottom:.65rem}
+.ct-links{display:flex;flex-direction:column;gap:7px;margin-bottom:1.25rem}
+.cl{display:flex;align-items:center;gap:10px;padding:.6rem .85rem;border:1px solid var(--border);border-radius:2px;text-decoration:none;color:var(--txt2);font-size:12px;letter-spacing:1px;transition:all .15s}
+.cl:hover{border-color:var(--g2);color:var(--g);background:var(--bg2)}
+.cl-ic{font-size:16px;min-width:22px;text-align:center}
+.sh-links{display:flex;flex-direction:column;gap:6px;margin-bottom:1.25rem}
+.sh-btn{display:flex;align-items:center;gap:10px;padding:.55rem .85rem;border:1px solid var(--border);border-radius:2px;cursor:pointer;font-family:var(--font);font-size:12px;color:var(--txt2);background:transparent;transition:all .15s;letter-spacing:1px;width:100%}
+.sh-btn:hover{border-color:var(--g2);color:var(--g);background:var(--bg2)}
+.sh-ic{font-size:15px;min-width:20px}
+.copyright{margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border);font-size:10px;color:var(--txt3);line-height:1.9;white-space:pre-line}
+.copyright a{color:var(--txt3);text-decoration:none}.copyright a:hover{color:var(--g2)}
+.toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);background:var(--bg2);border:1px solid var(--g);color:var(--g);font-family:var(--font);font-size:12px;padding:.55rem 1.1rem;border-radius:2px;z-index:10000;opacity:0;transition:opacity .25s;pointer-events:none;white-space:nowrap;letter-spacing:1px}
+.toast.show{opacity:1}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.blink{animation:blink 1s step-end infinite}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.screen.active{animation:fadeIn .2s ease}
+@media(max-width:480px){.domain-grid{grid-template-columns:repeat(2,1fr)}.btn-row{flex-wrap:wrap}.btn-row .btn{flex:1;min-width:120px}}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+<div class="app">
+<div class="lang-bar">
+  <button class="lb active" onclick="setLang('fr')">FR</button>
+  <button class="lb" onclick="setLang('en')">EN</button>
+  <button class="lb" onclick="setLang('ro')">RO</button>
+  <button class="lb" onclick="setLang('ru')">RU</button>
+  <button class="lb" onclick="setLang('it')">IT</button>
+</div>
+<div class="nav-tabs">
+  <button class="nt active" id="tab-home" onclick="showTab('home')">⬡ JEU</button>
+  <button class="nt" id="tab-stats" onclick="showTab('stats')">◈ STATS</button>
+  <button class="nt" id="tab-contact" onclick="showTab('contact')">✉ CONTACT</button>
+</div>
+
+<!-- HOME -->
+<div id="screen-home" class="screen active">
+  <div class="logo">S.O.F.I.A<span class="blink">_</span></div>
+  <div class="logo-sub" id="h-sub"></div>
+  <div class="vtag">v4.0 · MIT Open Source · © Vladimir Casapciuc / Владимир Касапчук</div>
+  <div class="sofia-grid" id="h-sofia"></div>
+  <div class="stats-bar">
+    <div class="sb-card"><div class="sb-n" id="qs-streak">0🔥</div><div class="sb-l" id="qs-sl"></div></div>
+    <div class="sb-card"><div class="sb-n" id="qs-played">0</div><div class="sb-l" id="qs-pl"></div></div>
+    <div class="sb-card"><div class="sb-n" id="qs-best">—</div><div class="sb-l" id="qs-bl"></div></div>
+  </div>
+  <div class="sec-lbl" id="h-bdg-lbl"></div>
+  <div class="badges-row" id="h-badges"></div>
+  <div class="challenge-box" onclick="startChallenge()">
+    <div class="chal-title" id="h-chal-title"></div>
+    <div class="chal-text" id="h-chal-text"></div>
+  </div>
+  <div class="sec-lbl" id="h-dom-lbl"></div>
+  <div class="domain-grid" id="h-domains"></div>
+  <button class="btn" id="h-btn-play" onclick="startGame()"></button>
+  <button class="btn btn-gold" id="h-btn-rand" onclick="startRandom()"></button>
+</div>
+
+<!-- GAME -->
+<div id="screen-game" class="screen">
+  <div id="g-tag" class="domain-tag"></div>
+  <div id="g-num" class="sc-num"></div>
+  <div id="g-text" class="sc-box"></div>
+  <div class="progress-bar" id="g-prog"></div>
+  <div id="g-shd" class="step-hd"></div>
+  <div id="g-sq" class="step-q"></div>
+  <div class="opts" id="g-opts"></div>
+  <button class="btn" id="g-next" onclick="nextStep()" disabled></button>
+</div>
+
+<!-- RESULT -->
+<div id="screen-result" class="screen">
+  <div class="sec-lbl" id="r-lbl"></div>
+  <div class="score-n" id="r-score"></div>
+  <div class="score-lv" id="r-lv"></div>
+  <div class="analysis" id="r-an"></div>
+  <div class="insight" id="r-ins"></div>
+  <div class="new-bdg" id="r-bdg" style="display:none">
+    <div class="new-bdg-t" id="r-bdg-t"></div>
+    <div class="new-bdg-c" id="r-bdg-c"></div>
+  </div>
+  <div class="sec-lbl" id="r-sh-lbl"></div>
+  <div class="sh-links" id="r-sh"></div>
+  <div class="btn-row">
+    <button class="btn" id="r-next" onclick="nextScenario()"></button>
+    <button class="btn" id="r-home" onclick="goHome()"></button>
+  </div>
+</div>
+
+<!-- STATS -->
+<div id="screen-stats" class="screen">
+  <div class="sec-lbl" id="st-lbl"></div>
+  <div class="stats-grid">
+    <div class="sc2"><div class="sc2-n" id="st-p">0</div><div class="sc2-l" id="st-pl"></div></div>
+    <div class="sc2"><div class="sc2-n" id="st-a">—</div><div class="sc2-l" id="st-al"></div></div>
+    <div class="sc2"><div class="sc2-n" id="st-b">—</div><div class="sc2-l" id="st-bl"></div></div>
+  </div>
+  <div class="sec-lbl" id="st-dlbl"></div>
+  <div id="st-doms" style="margin-bottom:1.1rem"></div>
+  <div class="sec-lbl" id="st-blbl"></div>
+  <div class="badges-row" id="st-badges"></div>
+  <button class="btn btn-danger btn-sm" id="st-reset" onclick="resetStats()" style="margin-top:1rem"></button>
+</div>
+
+<!-- CONTACT -->
+<div id="screen-contact" class="screen">
+  <div class="ct-hd" id="ct-title"></div>
+  <div class="ct-sub" id="ct-sub"></div>
+  <div class="sp-box">
+    <div class="sp-title" id="ct-sp-t"></div>
+    <div class="sp-desc" id="ct-sp-d"></div>
+    <div class="sp-price" id="ct-sp-p"></div>
+    <a href="mailto:v2land@gmail.com" class="btn btn-gold btn-sm" style="display:inline-block;width:auto;padding:.4rem 1.4rem" id="ct-sp-cta"></a>
+  </div>
+  <div class="sec-lbl" id="ct-ll"></div>
+  <div class="ct-links">
+    <a href="mailto:v2land@gmail.com" class="cl"><span class="cl-ic">📧</span>v2land@gmail.com</a>
+    <a href="https://x.com/Vlad8Mir" target="_blank" class="cl"><span class="cl-ic">𝕏</span>@Vlad8Mir — x.com/Vlad8Mir</a>
+    <a href="https://www.facebook.com/v2land/" target="_blank" class="cl"><span class="cl-ic">📘</span>facebook.com/v2land</a>
+  </div>
+  <div class="sec-lbl" id="ct-dt"></div>
+  <a href="https://ko-fi.com/v2land" target="_blank" class="btn btn-gold">☕ Ko-fi — ko-fi.com/v2land</a>
+  <a href="https://paypal.me/VladimirCasapciuc" target="_blank" class="btn">$ PayPal — paypal.me/VladimirCasapciuc</a>
+  <div class="sec-lbl" style="margin-top:1.25rem" id="ct-shl"></div>
+  <div class="sh-links">
+    <button class="sh-btn" onclick="shareGame('twitter')"><span class="sh-ic">𝕏</span><span id="ct-sx"></span></button>
+    <button class="sh-btn" onclick="shareGame('facebook')"><span class="sh-ic">📘</span><span id="ct-sfb"></span></button>
+    <button class="sh-btn" onclick="shareGame('copy')"><span class="sh-ic">🔗</span><span id="ct-sc"></span></button>
+  </div>
+  <div class="copyright" id="ct-copy"></div>
+</div>
+</div>
+<script>
+// ══ TRANSLATIONS ══════════════════════════════════════════════
+const TX={
+fr:{sub:'JEU DE DÉCISION STRATÉGIQUE',tabs:['⬡ JEU','◈ STATS','✉ CONTACT'],
+sofia:[['S','Situation','Qu\'est-ce qui se passe réellement ?'],['O','Options','Quels choix sont possibles ?'],['F','Forecast','Qu\'est-ce qui va probablement arriver ?'],['I','Incentives','Pourquoi les autres agissent ainsi ?'],['A','Action','Quelle est la meilleure décision ?']],
+streak:'SÉRIE',played:'JOUÉS',best:'MEILLEUR',avg:'MOYENNE',
+bdgLbl:'// BADGES',domLbl:'// CHOISIR UN DOMAINE',chalTitle:'⚡ DÉFI DU JOUR',domByLbl:'// PAR DOMAINE',
+btnPlay:'▶ JOUER',btnRand:'⚡ RANDOM',btnNext:'CONTINUER →',btnNextSc:'SCÉNARIO SUIVANT →',btnHome:'◂ ACCUEIL',btnBack:'◂ RETOUR',btnReset:'RÉINITIALISER LES STATS',
+rLbl:'// RÉSULTAT',stLbl:'// STATISTIQUES',shLbl:'// PARTAGER MON SCORE',shGameLbl:'// PARTAGER LE JEU',
+newBdg:'🏆 BADGE DÉBLOQUÉ !',noStats:'Aucune donnée — jouez des scénarios d\'abord.',copied:'Lien copié !',resetDone:'Stats réinitialisées.',
+ctTitle:'CONTACT & SPONSOR',ctSub:'Pour partenariats, sponsors, collaborations\nou pour soutenir le projet.',
+spT:'[ ZONE LOGO SPONSOR ]',spD:'Votre logo ici — visible par tous les joueurs\ndans les 5 langues.\nIdéal pour marques, écoles, organisations,\ncoachs et thérapeutes.',spP:'À partir de 50$/mois',spCta:'Contactez-nous',
+llbl:'// LIENS',dtlbl:'// SOUTENIR LE PROJET',shlbl:'// PARTAGER LE JEU',
+shareX:'Partager sur X — @Vlad8Mir',shareFB:'Partager sur Facebook',shareCopy:'Copier le lien',
+lvs:['RÉACTIF','FONCTIONNEL','STRATÉGIQUE','AVANCÉ','MAÎTRISE'],
+scOf:'SCÉNARIO',stOf:'ÉTAPE',domAll:'TOUS',
+sn:{S:'Situation',O:'Options',F:'Forecast',I:'Incentives',A:'Action'},
+smsg:(s,lv)=>'J\'ai scoré '+s+'/100 ('+lv+') sur S.O.F.I.A.!\nJeu par @Vlad8Mir\nhttps://x.com/Vlad8Mir',
+sgmsg:'S.O.F.I.A. — Jeu de décision stratégique en 5 langues!\nPar @Vlad8Mir\nhttps://x.com/Vlad8Mir',
+copy:'© 2024 Vladimir Casapciuc (Владимир Касапчук)\nLicence open source MIT · Utilisation et partage libres avec attribution\n📧 v2land@gmail.com · 𝕏 @Vlad8Mir\nfb.com/v2land · ko-fi.com/v2land · paypal.me/VladimirCasapciuc',
+bdgs:[{id:'first',icon:'🌱',name:'PREMIER PAS',desc:'Premier scénario complété'},{id:'s80',icon:'🧠',name:'STRATÈGE',desc:'Score 80+ obtenu'},{id:'s100',icon:'⚡',name:'MAÎTRISE',desc:'Score 100/100 obtenu'},{id:'str3',icon:'🔥',name:'SÉRIE x3',desc:'3 jours consécutifs'},{id:'all',icon:'🌍',name:'UNIVERSEL',desc:'Tous les domaines joués'}]},
+en:{sub:'STRATEGIC DECISION GAME',tabs:['⬡ GAME','◈ STATS','✉ CONTACT'],
+sofia:[['S','Situation','What is really happening?'],['O','Options','What choices do you have?'],['F','Forecast','What will probably happen?'],['I','Incentives','Why do others act this way?'],['A','Action','What is the best decision?']],
+streak:'STREAK',played:'PLAYED',best:'BEST',avg:'AVERAGE',
+bdgLbl:'// BADGES',domLbl:'// CHOOSE A DOMAIN',chalTitle:'⚡ DAILY CHALLENGE',domByLbl:'// BY DOMAIN',
+btnPlay:'▶ PLAY',btnRand:'⚡ RANDOM',btnNext:'CONTINUE →',btnNextSc:'NEXT SCENARIO →',btnHome:'◂ HOME',btnBack:'◂ BACK',btnReset:'RESET STATS',
+rLbl:'// RESULT',stLbl:'// STATISTICS',shLbl:'// SHARE MY SCORE',shGameLbl:'// SHARE THE GAME',
+newBdg:'🏆 BADGE UNLOCKED!',noStats:'No data yet — play some scenarios first.',copied:'Link copied!',resetDone:'Stats reset.',
+ctTitle:'CONTACT & SPONSOR',ctSub:'For partnerships, sponsors, collaborations\nor to support the project.',
+spT:'[ SPONSOR LOGO ZONE ]',spD:'Your logo here — visible to all players\nacross 5 languages.\nIdeal for brands, schools, organizations,\ncoaches and therapists.',spP:'From $50/month',spCta:'Contact Us',
+llbl:'// LINKS',dtlbl:'// SUPPORT THE PROJECT',shlbl:'// SHARE THE GAME',
+shareX:'Share on X — @Vlad8Mir',shareFB:'Share on Facebook',shareCopy:'Copy link',
+lvs:['REACTIVE','FUNCTIONAL','STRATEGIC','ADVANCED','MASTERY'],
+scOf:'SCENARIO',stOf:'STEP',domAll:'ALL',
+sn:{S:'Situation',O:'Options',F:'Forecast',I:'Incentives',A:'Action'},
+smsg:(s,lv)=>'I scored '+s+'/100 ('+lv+') on S.O.F.I.A.!\nGame by @Vlad8Mir\nhttps://x.com/Vlad8Mir',
+sgmsg:'S.O.F.I.A. — Strategic Decision Game in 5 languages!\nBy @Vlad8Mir\nhttps://x.com/Vlad8Mir',
+copy:'© 2024 Vladimir Casapciuc (Владимир Касапчук)\nMIT Open Source License · Free to use and share with attribution\n📧 v2land@gmail.com · 𝕏 @Vlad8Mir\nfb.com/v2land · ko-fi.com/v2land · paypal.me/VladimirCasapciuc',
+bdgs:[{id:'first',icon:'🌱',name:'FIRST STEP',desc:'First scenario completed'},{id:'s80',icon:'🧠',name:'STRATEGIST',desc:'Score 80+ achieved'},{id:'s100',icon:'⚡',name:'MASTERY',desc:'Score 100/100 achieved'},{id:'str3',icon:'🔥',name:'STREAK x3',desc:'3 consecutive days'},{id:'all',icon:'🌍',name:'UNIVERSAL',desc:'All domains played'}]},
+ro:{sub:'JOC DE DECIZIE STRATEGICĂ',tabs:['⬡ JOC','◈ STATS','✉ CONTACT'],
+sofia:[['S','Situație','Ce se întâmplă cu adevărat?'],['O','Opțiuni','Ce alegeri ai la dispoziție?'],['F','Forecast','Ce se va întâmpla probabil?'],['I','Incentive','De ce acționează ceilalți astfel?'],['A','Acțiune','Care este cea mai bună decizie?']],
+streak:'SERIE',played:'JUCATE',best:'CEL MAI BUN',avg:'MEDIE',
+bdgLbl:'// INSIGNE',domLbl:'// ALEGE UN DOMENIU',chalTitle:'⚡ PROVOCAREA ZILEI',domByLbl:'// PE DOMENIU',
+btnPlay:'▶ JOACĂ',btnRand:'⚡ RANDOM',btnNext:'CONTINUĂ →',btnNextSc:'SCENARIUL URMĂTOR →',btnHome:'◂ ACASĂ',btnBack:'◂ ÎNAPOI',btnReset:'RESETEAZĂ STATISTICILE',
+rLbl:'// REZULTAT',stLbl:'// STATISTICI',shLbl:'// DISTRIBUIE SCORUL',shGameLbl:'// DISTRIBUIE JOCUL',
+newBdg:'🏆 INSIGNĂ DEBLOCATĂ!',noStats:'Fără date — joacă mai întâi câteva scenarii.',copied:'Link copiat!',resetDone:'Statistici resetate.',
+ctTitle:'CONTACT & SPONSOR',ctSub:'Pentru parteneriate, sponsori, colaborări\nsau pentru a susține proiectul.',
+spT:'[ ZONĂ LOGO SPONSOR ]',spD:'Logo-ul tău aici — vizibil de toți jucătorii\nîn 5 limbi.\nIdeal pentru branduri, școli, organizații,\ncoaches și terapeuți.',spP:'De la 50$/lună',spCta:'Contactați-ne',
+llbl:'// LINKURI',dtlbl:'// SUSȚINE PROIECTUL',shlbl:'// DISTRIBUIE JOCUL',
+shareX:'Distribuie pe X — @Vlad8Mir',shareFB:'Distribuie pe Facebook',shareCopy:'Copiază link-ul',
+lvs:['REACTIV','FUNCȚIONAL','STRATEGIC','AVANSAT','MAESTRU'],
+scOf:'SCENARIU',stOf:'PAS',domAll:'TOATE',
+sn:{S:'Situație',O:'Opțiuni',F:'Forecast',I:'Incentive',A:'Acțiune'},
+smsg:(s,lv)=>'Am obținut '+s+'/100 ('+lv+') pe S.O.F.I.A.!\nJoc de @Vlad8Mir\nhttps://x.com/Vlad8Mir',
+sgmsg:'S.O.F.I.A. — Joc de decizie strategică în 5 limbi!\nDe @Vlad8Mir\nhttps://x.com/Vlad8Mir',
+copy:'© 2024 Vladimir Casapciuc (Владимир Касапчук)\nLicență open source MIT · Utilizare și distribuire libere cu atribuire\n📧 v2land@gmail.com · 𝕏 @Vlad8Mir\nfb.com/v2land · ko-fi.com/v2land · paypal.me/VladimirCasapciuc',
+bdgs:[{id:'first',icon:'🌱',name:'PRIMUL PAS',desc:'Primul scenariu completat'},{id:'s80',icon:'🧠',name:'STRATEG',desc:'Scor 80+ obținut'},{id:'s100',icon:'⚡',name:'MAESTRU',desc:'Scor 100/100 obținut'},{id:'str3',icon:'🔥',name:'SERIE x3',desc:'3 zile consecutive'},{id:'all',icon:'🌍',name:'UNIVERSAL',desc:'Toate domeniile jucate'}]},
+ru:{sub:'СТРАТЕГИЧЕСКАЯ ИГРА РЕШЕНИЙ',tabs:['⬡ ИГРА','◈ СТАТ.','✉ КОНТАКТ'],
+sofia:[['S','Ситуация','Что происходит на самом деле?'],['O','Опции','Какие варианты есть?'],['F','Прогноз','Что вероятно произойдёт?'],['I','Мотивы','Почему другие действуют так?'],['A','Действие','Какое решение лучшее?']],
+streak:'СЕРИЯ',played:'СЫГРАНО',best:'ЛУЧШИЙ',avg:'СРЕДНЕЕ',
+bdgLbl:'// ЗНАЧКИ',domLbl:'// ВЫБЕРИ ДОМЕН',chalTitle:'⚡ ЗАДАЧА ДНЯ',domByLbl:'// ПО ДОМЕНУ',
+btnPlay:'▶ ИГРАТЬ',btnRand:'⚡ RANDOM',btnNext:'ПРОДОЛЖИТЬ →',btnNextSc:'СЛЕДУЮЩИЙ СЦЕНАРИЙ →',btnHome:'◂ ГЛАВНАЯ',btnBack:'◂ НАЗАД',btnReset:'СБРОСИТЬ СТАТИСТИКУ',
+rLbl:'// РЕЗУЛЬТАТ',stLbl:'// СТАТИСТИКА',shLbl:'// ПОДЕЛИТЬСЯ СЧЁТОМ',shGameLbl:'// ПОДЕЛИТЬСЯ ИГРОЙ',
+newBdg:'🏆 ЗНАЧОК РАЗБЛОКИРОВАН!',noStats:'Нет данных — сначала сыграйте сценарии.',copied:'Ссылка скопирована!',resetDone:'Статистика сброшена.',
+ctTitle:'КОНТАКТ И СПОНСОР',ctSub:'Для партнёрства, спонсорства, сотрудничества\nили для поддержки проекта.',
+spT:'[ ЗОНА ЛОГОТИПА СПОНСОРА ]',spD:'Ваш логотип здесь — виден всем игрокам\nна 5 языках.\nИдеально для брендов, школ, организаций,\nкоучей и терапевтов.',spP:'От 50$/месяц',spCta:'Связаться с нами',
+llbl:'// ССЫЛКИ',dtlbl:'// ПОДДЕРЖАТЬ ПРОЕКТ',shlbl:'// ПОДЕЛИТЬСЯ ИГРОЙ',
+shareX:'Поделиться на X — @Vlad8Mir',shareFB:'Поделиться на Facebook',shareCopy:'Скопировать ссылку',
+lvs:['РЕАКТИВНЫЙ','ФУНКЦИОНАЛЬНЫЙ','СТРАТЕГИЧЕСКИЙ','ПРОДВИНУТЫЙ','МАСТЕРСТВО'],
+scOf:'СЦЕНАРИЙ',stOf:'ШАГ',domAll:'ВСЕ',
+sn:{S:'Ситуация',O:'Опции',F:'Прогноз',I:'Мотивы',A:'Действие'},
+smsg:(s,lv)=>'Я набрал '+s+'/100 ('+lv+') в S.O.F.I.A.!\nИгра от @Vlad8Mir\nhttps://x.com/Vlad8Mir',
+sgmsg:'S.O.F.I.A. — Стратегическая игра на 5 языках!\nОт @Vlad8Mir\nhttps://x.com/Vlad8Mir',
+copy:'© 2024 Владимир Касапчук (Vladimir Casapciuc)\nЛицензия MIT · Свободное использование с указанием автора\n📧 v2land@gmail.com · 𝕏 @Vlad8Mir\nfb.com/v2land · ko-fi.com/v2land · paypal.me/VladimirCasapciuc',
+bdgs:[{id:'first',icon:'🌱',name:'ПЕРВЫЙ ШАГ',desc:'Первый сценарий завершён'},{id:'s80',icon:'🧠',name:'СТРАТЕГ',desc:'Счёт 80+ достигнут'},{id:'s100',icon:'⚡',name:'МАСТЕРСТВО',desc:'Счёт 100/100 достигнут'},{id:'str3',icon:'🔥',name:'СЕРИЯ x3',desc:'3 дня подряд'},{id:'all',icon:'🌍',name:'УНИВЕРСАЛ',desc:'Все домены сыграны'}]},
+it:{sub:'GIOCO DI DECISIONE STRATEGICA',tabs:['⬡ GIOCO','◈ STATS','✉ CONTATTO'],
+sofia:[['S','Situazione','Cosa sta succedendo davvero?'],['O','Opzioni','Quali scelte hai a disposizione?'],['F','Forecast','Cosa accadrà probabilmente?'],['I','Incentivi','Perché gli altri agiscono così?'],['A','Azione','Qual è la decisione migliore?']],
+streak:'SERIE',played:'GIOCATI',best:'MIGLIORE',avg:'MEDIA',
+bdgLbl:'// BADGE',domLbl:'// SCEGLI UN DOMINIO',chalTitle:'⚡ SFIDA DEL GIORNO',domByLbl:'// PER DOMINIO',
+btnPlay:'▶ GIOCA',btnRand:'⚡ RANDOM',btnNext:'CONTINUA →',btnNextSc:'PROSSIMO SCENARIO →',btnHome:'◂ HOME',btnBack:'◂ INDIETRO',btnReset:'RESETTA STATISTICHE',
+rLbl:'// RISULTATO',stLbl:'// STATISTICHE',shLbl:'// CONDIVIDI IL PUNTEGGIO',shGameLbl:'// CONDIVIDI IL GIOCO',
+newBdg:'🏆 BADGE SBLOCCATO!',noStats:'Nessun dato — gioca prima alcuni scenari.',copied:'Link copiato!',resetDone:'Statistiche resettate.',
+ctTitle:'CONTATTO & SPONSOR',ctSub:'Per partnership, sponsor, collaborazioni\no per supportare il progetto.',
+spT:'[ ZONA LOGO SPONSOR ]',spD:'Il tuo logo qui — visibile a tutti i giocatori\nin 5 lingue.\nIdeale per marchi, scuole, organizzazioni,\ncoach e terapeuti.',spP:'Da 50$/mese',spCta:'Contattaci',
+llbl:'// LINK',dtlbl:'// SUPPORTA IL PROGETTO',shlbl:'// CONDIVIDI IL GIOCO',
+shareX:'Condividi su X — @Vlad8Mir',shareFB:'Condividi su Facebook',shareCopy:'Copia il link',
+lvs:['REATTIVO','FUNZIONALE','STRATEGICO','AVANZATO','MAESTRIA'],
+scOf:'SCENARIO',stOf:'PASSO',domAll:'TUTTI',
+sn:{S:'Situazione',O:'Opzioni',F:'Forecast',I:'Incentivi',A:'Azione'},
+smsg:(s,lv)=>'Ho ottenuto '+s+'/100 ('+lv+') su S.O.F.I.A.!\nGioco di @Vlad8Mir\nhttps://x.com/Vlad8Mir',
+sgmsg:'S.O.F.I.A. — Gioco di decisione in 5 lingue!\nDi @Vlad8Mir\nhttps://x.com/Vlad8Mir',
+copy:'© 2024 Vladimir Casapciuc (Владимир Касапчук)\nLicenza open source MIT · Utilizzo e condivisione liberi con attribuzione\n📧 v2land@gmail.com · 𝕏 @Vlad8Mir\nfb.com/v2land · ko-fi.com/v2land · paypal.me/VladimirCasapciuc',
+bdgs:[{id:'first',icon:'🌱',name:'PRIMO PASSO',desc:'Primo scenario completato'},{id:'s80',icon:'🧠',name:'STRATEGA',desc:'Punteggio 80+ ottenuto'},{id:'s100',icon:'⚡',name:'MAESTRIA',desc:'Punteggio 100/100 ottenuto'},{id:'str3',icon:'🔥',name:'SERIE x3',desc:'3 giorni consecutivi'},{id:'all',icon:'🌍',name:'UNIVERSALE',desc:'Tutti i domini giocati'}]}
+};
+
+// ══ SCENARIOS ═════════════════════════════════════════════════
+function s(id,dom,txt,steps,ins){return{id,domain:dom,text:txt,steps,insight:ins};}
+function st(q,opts,c,an){return{q,opts,c,an};}
+const L=['S','O','F','I','A'];
+
+const SC=[
+s(1,{fr:'SÉCURITÉ',en:'SECURITY',ro:'SECURITATE',ru:'БЕЗОПАСНОСТЬ',it:'SICUREZZA'},
+{fr:'Tu arrives dans un café bondé. Ton téléphone est sur la table. Tu dois commander — 2 minutes d\'absence. Plusieurs inconnus sont autour.',
+en:'You enter a busy café. Phone on the table. You need to order — 2 min away. Strangers nearby.',
+ro:'Cafenea aglomerată. Telefonul pe masă. 2 min absență. Necunoscuți în jur.',
+ru:'Многолюдное кафе. Телефон на столе. Заказ — 2 минуты. Вокруг незнакомцы.',
+it:'Bar affollato. Telefono sul tavolo. Ordine — 2 minuti. Sconosciuti intorno.'},
+{S:st({fr:'Quelle est la vraie situation?',en:'Real situation?',ro:'Situația reală?',ru:'Реальная ситуация?',it:'Situazione reale?'},
+{fr:['Café calme, rien ne se passera','Objet visible + espace public + absence = risque','Je reviens vite, pas de souci'],
+en:['Calm café, nothing will happen','Visible item + public space + absence = risk','I\'ll be quick, fine'],
+ro:['Cafenea calmă','Obiect vizibil + spațiu public + absență = risc','Vin repede, nu e problemă'],
+ru:['Спокойное кафе, ничего не случится','Видимый предмет + место + отсутствие = риск','Я быстро, всё ок'],
+it:['Bar tranquillo, niente succederà','Oggetto visibile + spazio pubblico + assenza = rischio','Torno subito, ok']},1,
+{fr:['Biais confort — ignore les faits','Lecture neutre et complète ✓','Biais temporel — 2 min n\'est pas anodin'],
+en:['Comfort bias','Clear neutral reading ✓','Time bias — 2 min is not trivial'],
+ro:['Prejudecată confort','Lectură neutră ✓','Prejudecată temporală'],
+ru:['Предвзятость комфорта','Чёткое восприятие ✓','Временная предвзятость'],
+it:['Bias comfort','Lettura neutra ✓','Bias temporale']}),
+O:st({fr:'Quelles options as-tu?',en:'Options?',ro:'Opțiuni?',ru:'Варианты?',it:'Opzioni?'},
+{fr:['Laisser le téléphone','Le prendre avec toi','Le cacher sous ta veste'],
+en:['Leave the phone','Take it with you','Hide it under your jacket'],
+ro:['Lasă telefonul','Ia-l cu tine','Ascunde-l sub jachetă'],
+ru:['Оставить телефон','Взять с собой','Спрятать под куртку'],
+it:['Lasciare il telefono','Portarlo con te','Nasconderlo sotto la giacca']},1,
+{fr:['Risque max — objet exposé','Stratégie dominante ✓','Réduction partielle — non fiable'],
+en:['Max risk','Dominant strategy ✓','Partial — unreliable'],
+ro:['Risc maxim','Strategie dominantă ✓','Parțial'],
+ru:['Максимальный риск','Доминирующая стратегия ✓','Частично'],
+it:['Rischio massimo','Strategia dominante ✓','Parziale']}),
+F:st({fr:'Qu\'est-ce qui va probablement arriver?',en:'What will probably happen?',ro:'Ce se va întâmpla?',ru:'Что вероятно?',it:'Cosa accadrà?'},
+{fr:['Rien — les gens respectent','Risque faible mais réel','Quelqu\'un va certainement le prendre'],
+en:['Nothing — people respect','Low but real risk','Someone will take it'],
+ro:['Nimic','Risc mic dar real','Cineva îl va lua'],
+ru:['Ничего','Небольшой но реальный риск','Кто-то возьмёт'],
+it:['Niente','Rischio basso ma reale','Qualcuno lo prenderà']},1,
+{fr:['Naïf — ignore la réalité','Calibré ✓','Pessimiste'],
+en:['Naive','Calibrated ✓','Pessimistic'],
+ro:['Naiv','Calibrat ✓','Pesimist'],
+ru:['Наивно','Калиброванно ✓','Пессимистично'],
+it:['Ingenuo','Calibrato ✓','Pessimista']}),
+I:st({fr:'Pourquoi quelqu\'un pourrait agir?',en:'Why might someone act?',ro:'De ce ar acționa?',ru:'Почему кто-то действует?',it:'Perché qualcuno potrebbe agire?'},
+{fr:['Personne ne veut les affaires des autres','Opportunité + faible risque = incitation','Les gens sont généralement honnêtes'],
+en:['Nobody wants others\' things','Opportunity + low risk = incentive','People are generally honest'],
+ro:['Nimeni nu vrea lucrurile altora','Oportunitate + risc scăzut = stimulent','Oamenii sunt cinstiți'],
+ru:['Никому не нужны чужие вещи','Возможность + малый риск = стимул','Люди честны'],
+it:['Nessuno vuole le cose degli altri','Opportunità + basso rischio = incentivo','Le persone sono oneste']},1,
+{fr:['Ignore la diversité humaine','Modèle correct ✓','Vrai en moyenne mais insuffisant'],
+en:['Ignores diversity','Correct model ✓','True on avg, insufficient'],
+ro:['Ignoră diversitatea','Model corect ✓','Adevărat în medie'],
+ru:['Игнорирует разнообразие','Правильная модель ✓','Верно в среднем'],
+it:['Ignora la diversità','Modello corretto ✓','Vero in media']}),
+A:st({fr:'Meilleure action?',en:'Best action?',ro:'Cea mai bună acțiune?',ru:'Лучшее действие?',it:'Migliore azione?'},
+{fr:['Laisser et espérer','Prendre le téléphone avec toi','Demander à un voisin'],
+en:['Leave and hope','Take the phone with you','Ask a neighbor to watch'],
+ro:['Lasă și speră','Ia telefonul','Roagă un vecin'],
+ru:['Оставить и надеяться','Взять телефон с собой','Попросить соседа'],
+it:['Lasciare e sperare','Portare il telefono','Chiedere a qualcuno']},1,
+{fr:['Stratégie faible','Optimal — tu contrôles ✓','Mieux que A mais dépend d\'un inconnu'],
+en:['Weak strategy','Optimal ✓','Better than A but unknown'],
+ro:['Strategie slabă','Optimal ✓','Mai bine decât A'],
+ru:['Слабая стратегия','Оптимально ✓','Лучше A'],
+it:['Strategia debole','Ottimale ✓','Meglio di A']})},
+{fr:'La meilleure stratégie élimine le risque à la source. Tu ne contrôles pas les autres — mais tu contrôles les conditions que tu crées.',
+en:'The best strategy eliminates risk at the source. You don\'t control others — but you control the conditions you create.',
+ro:'Cea mai bună strategie elimină riscul de la sursă. Nu controlezi pe alții — dar controlezi condițiile pe care le creezi.',
+ru:'Лучшая стратегия устраняет риск у источника. Ты не контролируешь других — но контролируешь условия.',
+it:'La migliore strategia elimina il rischio alla fonte. Non controlli gli altri — ma controlli le condizioni che crei.'}),
+
+s(2,{fr:'CYBERSÉCURITÉ',en:'CYBERSECURITY',ro:'SECURITATE DIGITALĂ',ru:'КИБЕРБЕЗОПАСНОСТЬ',it:'CYBERSICUREZZA'},
+{fr:'Tu reçois un SMS : "Votre compte est suspendu. Cliquez ici immédiatement." Le lien ressemble au vrai site. Tu es pressé.',
+en:'Urgent text: "Account suspended. Click here immediately." Link looks real. You\'re busy.',
+ro:'SMS urgent: "Contul suspendat. Apasă imediat." Link-ul pare oficial. Ești grăbit.',
+ru:'СМС: "Счёт заблокирован. Нажмите немедленно." Ссылка выглядит легитимно. Занят.',
+it:'SMS urgente: "Account sospeso. Clicca immediatamente." Il link sembra vero. Sei occupato.'},
+{S:st({fr:'Quelle est la vraie situation?',en:'Real situation?',ro:'Situația reală?',ru:'Реальная ситуация?',it:'Situazione reale?'},
+{fr:['Vrai problème — agir vite','Urgence + lien externe + pression = alerte phishing','Peut-être réel, peut-être pas'],
+en:['Real problem — act fast','Urgency + external link + pressure = phishing','Maybe real, maybe not'],
+ro:['Problemă reală','Urgență + link extern + presiune = phishing','Poate real, poate nu'],
+ru:['Реальная проблема','Срочность + ссылка + давление = фишинг','Может реально'],
+it:['Problema reale','Urgenza + link esterno + pressione = phishing','Forse reale']},1,
+{fr:['Réaction émotionnelle','Lecture stratégique — identifie le pattern ✓','Hésitation sans cadre'],
+en:['Emotional reaction','Strategic reading ✓','Hesitation without framework'],
+ro:['Reacție emoțională','Lectură strategică ✓','Ezitare'],
+ru:['Эмоциональная реакция','Стратегическое восприятие ✓','Нерешительность'],
+it:['Reazione emotiva','Lettura strategica ✓','Esitazione']}),
+O:st({fr:'Quelles options?',en:'Options?',ro:'Opțiuni?',ru:'Варианты?',it:'Opzioni?'},
+{fr:['Cliquer sur le lien','Ignorer complètement','Vérifier sur le site officiel ou appeler'],
+en:['Click the link','Ignore completely','Verify on official site or call'],
+ro:['Apasă pe link','Ignoră complet','Verifică pe site-ul oficial sau sună'],
+ru:['Нажать на ссылку','Полностью игнорировать','Проверить на официальном сайте'],
+it:['Cliccare il link','Ignorare completamente','Verificare sul sito ufficiale o chiamare']},2,
+{fr:['Erreur critique','Passif — ne sais pas encore','Optimal — vérification indépendante ✓'],
+en:['Critical error','Passive — still don\'t know','Optimal ✓'],
+ro:['Eroare critică','Pasiv','Optimal ✓'],
+ru:['Критическая ошибка','Пассивно','Оптимально ✓'],
+it:['Errore critico','Passivo','Ottimale ✓']}),
+F:st({fr:'Si tu cliques?',en:'If you click?',ro:'Dacă apeși?',ru:'Если нажать?',it:'Se clicchi?'},
+{fr:['Problème résolu rapidement','Phishing — vol de données ou accès','Probablement rien de grave'],
+en:['Problem resolved quickly','Phishing — data or access theft','Probably nothing serious'],
+ro:['Problema se rezolvă','Phishing — furt de date','Probabil nimic grav'],
+ru:['Проблема решится','Фишинг — кража данных','Вероятно ничего'],
+it:['Il problema si risolve','Phishing — furto dati','Probabilmente niente']},1,
+{fr:['Pensée magique','Correct — urgence exploite l\'impulsion ✓','Confiance non justifiée'],
+en:['Magical thinking','Correct ✓','Unjustified confidence'],
+ro:['Gândire magică','Corect ✓','Încredere nejustificată'],
+ru:['Магическое мышление','Верно ✓','Неоправданная уверенность'],
+it:['Pensiero magico','Corretto ✓','Fiducia non giustificata']}),
+I:st({fr:'Pourquoi cette urgence artificielle?',en:'Why this artificial urgency?',ro:'De ce urgența artificială?',ru:'Зачем срочность?',it:'Perché questa urgenza?'},
+{fr:['La banque veut vraiment aider','L\'attaquant exploite la peur pour court-circuiter la réflexion','Style normal des banques'],
+en:['Bank genuinely wants to help','Attacker exploits fear to bypass thinking','Normal bank communication'],
+ro:['Banca vrea să ajute','Atacatorul exploatează frica ✓','Stil normal'],
+ru:['Банк хочет помочь','Злоумышленник использует страх ✓','Обычный стиль'],
+it:['La banca vuole aiutare','L\'attaccante sfrutta la paura ✓','Stile normale']},1,
+{fr:['Ignore la manipulation','Exact — urgence réduit l\'analyse ✓','Banques n\'utilisent jamais ça'],
+en:['Ignores manipulation','Correct ✓','Real banks never do this'],
+ro:['Ignoră mecanismul','Corect ✓','Băncile nu fac asta'],
+ru:['Игнорирует механизм','Верно ✓','Банки так не делают'],
+it:['Ignora il meccanismo','Corretto ✓','Le banche non lo fanno']}),
+A:st({fr:'Meilleure action?',en:'Best action?',ro:'Cea mai bună acțiune?',ru:'Лучшее действие?',it:'Migliore azione?'},
+{fr:['Cliquer pour voir','Ignorer et effacer','Site officiel direct + signaler le message'],
+en:['Click to see','Ignore and delete','Official site + report message'],
+ro:['Apasă să vezi','Ignoră și șterge','Site oficial + raportează'],
+ru:['Нажать посмотреть','Игнорировать и удалить','Официальный сайт + сообщить'],
+it:['Cliccare per vedere','Ignorare e cancellare','Sito ufficiale + segnalare']},2,
+{fr:['Piège classique','Mieux que A mais rates le signalement','Parfait — vérification + responsabilité ✓'],
+en:['Classic trap','Better than A','Perfect ✓'],
+ro:['Capcana clasică','Mai bine decât A','Perfect ✓'],
+ru:['Классическая ловушка','Лучше A','Отлично ✓'],
+it:['Trappola classica','Meglio di A','Perfetto ✓']})},
+{fr:'Une vraie urgence supporte toujours l\'analyse. Seule une manipulation a besoin que tu décides sans réfléchir. Règle d\'or : plus la pression est forte, plus tu ralentis.',
+en:'A real emergency always supports analysis. Only manipulation needs you to decide without thinking. Golden rule: more pressure = slow down more.',
+ro:'O urgență reală suportă analiza. Doar manipularea vrea să decizi fără să gândești. Regula: mai multă presiune = mai mult încetinești.',
+ru:'Настоящая срочность выдерживает анализ. Только манипуляция требует решений без размышлений. Золотое правило: больше давления — медленнее действуй.',
+it:'Una vera urgenza supporta l\'analisi. Solo la manipolazione vuole che tu decida senza pensare. Regola: più pressione = rallenta di più.'}),
+
+s(3,{fr:'POLITIQUE',en:'POLITICS',ro:'POLITICĂ',ru:'ПОЛИТИКА',it:'POLITICA'},
+{fr:'Tu lis un article viral : un candidat aurait dit quelque chose de scandaleux. Tes amis le partagent en masse. L\'élection est dans 3 jours.',
+en:'Viral article: a candidate allegedly said something scandalous. Friends share everywhere. Election in 3 days.',
+ro:'Articol viral: un candidat ar fi spus ceva scandalos. Prietenii distribuie masiv. Alegeri în 3 zile.',
+ru:'Вирусная статья: кандидат якобы сказал нечто скандальное. Все репостят. Выборы через 3 дня.',
+it:'Articolo virale: un candidato avrebbe detto qualcosa di scandaloso. Gli amici condividono ovunque. Elezioni tra 3 giorni.'},
+{S:st({fr:'Quelle est la vraie situation?',en:'Real situation?',ro:'Situația reală?',ru:'Реальная ситуация?',it:'Situazione reale?'},
+{fr:['Une vraie révélation scandaleuse','Info non vérifiée + timing électoral + pression sociale = alerte désinformation','Tout le monde partage donc c\'est vrai'],
+en:['Real scandalous revelation','Unverified info + electoral timing + social pressure = disinfo alert','Everyone shares so it\'s true'],
+ro:['Revelație reală','Info neverificată + timing electoral + presiune = alertă dezinformare','Toată lumea distribuie deci e adevărat'],
+ru:['Реальное разоблачение','Непроверенная информация + момент + давление = дезинформация','Все делятся значит правда'],
+it:['Vera rivelazione scandalosa','Info non verificata + timing elettorale + pressione = disinformazione','Tutti condividono quindi è vero']},1,
+{fr:['Biais de confirmation','Lecture stratégique complète ✓','Biais de consensus — popularité ≠ vérité'],
+en:['Confirmation bias','Complete strategic reading ✓','Consensus bias'],
+ro:['Prejudecată de confirmare','Lectură completă ✓','Prejudecată de consens'],
+ru:['Предвзятость подтверждения','Полное восприятие ✓','Предвзятость консенсуса'],
+it:['Bias di conferma','Lettura completa ✓','Bias di consenso']}),
+O:st({fr:'Quelles options?',en:'Options?',ro:'Opțiuni?',ru:'Варианты?',it:'Opzioni?'},
+{fr:['Partager immédiatement','Ignorer complètement','Vérifier via 2-3 sources indépendantes avant toute action'],
+en:['Share immediately','Ignore completely','Verify via 2-3 independent sources first'],
+ro:['Distribuie imediat','Ignoră complet','Verifică via 2-3 surse independente mai întâi'],
+ru:['Поделиться немедленно','Полностью игнорировать','Проверить через 2-3 независимых источника'],
+it:['Condividere immediatamente','Ignorare completamente','Verificare tramite 2-3 fonti indipendenti']},2,
+{fr:['Risque de propager de la désinformation','Passif — rates l\'occasion d\'agir intelligemment','Optimal — vérification avant amplification ✓'],
+en:['Risk of spreading disinfo','Passive','Optimal ✓'],
+ro:['Risc dezinformare','Pasiv','Optimal ✓'],
+ru:['Риск дезинформации','Пассивно','Оптимально ✓'],
+it:['Rischio disinformazione','Passivo','Ottimale ✓']}),
+F:st({fr:'Si tu partages sans vérifier?',en:'If you share without verifying?',ro:'Dacă distribui fără a verifica?',ru:'Если поделишься без проверки?',it:'Se condividi senza verificare?'},
+{fr:['Je contribue à informer les citoyens','Je risque de propager une fausse info + abîmer ma crédibilité','Rien de grave'],
+en:['I help inform citizens','Risk spreading false info + damage credibility','Nothing serious'],
+ro:['Contribui la informare','Risc dezinformare + credibilitate afectată','Nimic grav'],
+ru:['Помогаю информировать','Риск дезинформации + урон репутации','Ничего серьёзного'],
+it:['Contribuisco a informare','Rischio disinformazione + danno credibilità','Niente']},1,
+{fr:['Vrai seulement si info est correcte','Correct — désinformation virale pollue le débat ✓','Minimise l\'impact'],
+en:['True only if info is correct','Correct ✓','Minimizes impact'],
+ro:['Adevărat dacă info e corectă','Corect ✓','Minimizează impactul'],
+ru:['Верно только если правдиво','Верно ✓','Минимизирует влияние'],
+it:['Vero solo se info è corretta','Corretto ✓','Minimizza l\'impatto']}),
+I:st({fr:'Pourquoi ce timing?',en:'Why this timing?',ro:'De ce acest timing?',ru:'Почему в такой момент?',it:'Perché questo timing?'},
+{fr:['Coïncidence','Timing électoral = fenêtre d\'influence maximale — souvent calculé','Les journalistes font leur travail'],
+en:['Coincidence','Electoral timing = max influence window — often calculated','Journalists doing their job'],
+ro:['Coincidență','Timing electoral = fereastră de influență maximă','Jurnaliștii lucrează'],
+ru:['Совпадение','Электоральный момент = максимальное влияние — часто расчётно','Журналисты работают'],
+it:['Coincidenza','Timing elettorale = finestra di max influenza','Giornalisti al lavoro']},1,
+{fr:['Ignore la mécanique de la désinformation','Exact — désinformation cible les moments de vulnérabilité ✓','Possible mais le timing reste un signal'],
+en:['Ignores disinfo mechanics','Correct ✓','Possible but timing is a signal'],
+ro:['Ignoră mecanica','Corect ✓','Posibil dar timing-ul e semnal'],
+ru:['Игнорирует механику','Верно ✓','Возможно но момент сигнал'],
+it:['Ignora la meccanica','Corretto ✓','Possibile ma il timing è un segnale']}),
+A:st({fr:'Meilleure action?',en:'Best action?',ro:'Cea mai bună acțiune?',ru:'Лучшее действие?',it:'Migliore azione?'},
+{fr:['Partager — le public doit savoir','Ignorer — trop compliqué','Vérifier → si confirmé partager avec source, sinon ne pas partager'],
+en:['Share — public must know','Ignore — too complex','Verify → if confirmed share with source, else don\'t'],
+ro:['Distribuie','Ignoră','Verifică → dacă confirmat distribuie cu sursă, dacă nu nu distribui'],
+ru:['Поделиться','Игнорировать','Проверить → если подтверждено поделиться с источником иначе нет'],
+it:['Condividere','Ignorare','Verificare → se confermato condividere con fonte, altrimenti no']},2,
+{fr:['Amplifie potentiellement la désinformation','Passif — rates aussi une vraie info','Optimal — citoyen responsable ✓'],
+en:['Amplifies disinfo','Passive — miss real info too','Optimal — responsible citizen ✓'],
+ro:['Amplifică dezinformarea','Pasiv','Optimal ✓'],
+ru:['Усиливает дезинформацию','Пассивно','Оптимально ✓'],
+it:['Amplifica disinformazione','Passivo','Ottimale ✓']})},
+{fr:'La désinformation politique cible les moments où les émotions sont les plus fortes. Partager une info non vérifiée en période électorale peut faire plus de tort que de bien, même avec les meilleures intentions.',
+en:'Political disinfo targets moments when emotions are strongest. Sharing unverified info during elections can cause more harm than good, even with best intentions.',
+ro:'Dezinformarea politică vizează momentele când emoțiile sunt cele mai puternice. Distribuirea de informații neverificate în perioadă electorală poate face mai mult rău decât bine.',
+ru:'Политическая дезинформация нацелена на моменты когда эмоции сильнейшие. Распространение непроверенной информации в период выборов причиняет больше вреда чем пользы.',
+it:'La disinformazione politica colpisce i momenti in cui le emozioni sono più forti. Condividere info non verificate durante le elezioni può fare più danno che bene.'}),
+
+s(4,{fr:'RELATIONS',en:'RELATIONSHIPS',ro:'RELAȚII',ru:'ОТНОШЕНИЯ',it:'RELAZIONI'},
+{fr:'Ton/ta partenaire est distant(e) depuis quelques jours. Pas d\'explication. Tu commences à imaginer les pires scénarios.',
+en:'Your partner has been distant for a few days. No explanation. Worst-case scenarios fill your mind.',
+ro:'Partenerul/partenera ta e distant/ă de câteva zile. Fără explicație. Imaginezi scenariile cele mai rele.',
+ru:'Партнёр дистанцировался несколько дней. Без объяснений. Воображаешь худшее.',
+it:'Il/la partner è distante da qualche giorno. Nessuna spiegazione. I peggiori scenari ti vengono in mente.'},
+{S:st({fr:'Quelle est la vraie situation?',en:'Real situation?',ro:'Situația reală?',ru:'Реальная ситуация?',it:'Situazione reale?'},
+{fr:['Mon partenaire est clairement fâché contre moi','Changement comportemental observé — cause inconnue','C\'est la fin de la relation'],
+en:['My partner is clearly upset','Behavioral change — cause unknown','This is the end'],
+ro:['Partenerul e clar supărat pe mine','Schimbare comportamentală — cauza necunoscută','E sfârșitul'],
+ru:['Партнёр явно злится','Изменение поведения — причина неизвестна','Это конец'],
+it:['Il partner è chiaramente arrabbiato','Cambiamento comportamentale — causa sconosciuta','È la fine']},1,
+{fr:['Projection — assumes sans données','Observation neutre des faits ✓','Catastrophisme — aucune donnée ne soutient'],
+en:['Projection','Neutral observation ✓','Catastrophism'],
+ro:['Proiecție','Observație neutră ✓','Catastrofism'],
+ru:['Проекция','Нейтральное наблюдение ✓','Катастрофизм'],
+it:['Proiezione','Osservazione neutrale ✓','Catastrofismo']}),
+O:st({fr:'Quelles options?',en:'Options?',ro:'Opțiuni?',ru:'Варианты?',it:'Opzioni?'},
+{fr:['Te fermer et attendre','Demander calmement si tout va bien','L\'accuser d\'être distant(e)'],
+en:['Close off and wait','Calmly ask if everything\'s okay','Accuse them of being distant'],
+ro:['Te închide și aștepți','Întrebi calm dacă totul e bine','Îl/o acuzi că e distant/ă'],
+ru:['Закрыться и ждать','Спокойно спросить всё ли хорошо','Обвинить в дистанцировании'],
+it:['Chiuderti e aspettare','Chiedere con calma se va tutto bene','Accusarlo/la di essere distante']},1,
+{fr:['Passif — distance grandit','Ouverture sans accusation ✓','Conflit basé sur une supposition'],
+en:['Passive','Open without accusation ✓','Conflict from assumption'],
+ro:['Pasiv','Deschidere fără acuzație ✓','Conflict din presupunere'],
+ru:['Пассивно','Открытость без обвинений ✓','Конфликт из предположения'],
+it:['Passivo','Apertura senza accusa ✓','Conflitto da supposizione']}),
+F:st({fr:'Si tu imagines le pire?',en:'If you imagine the worst?',ro:'Dacă imaginezi cel mai rău?',ru:'Если воображать худшее?',it:'Se immagini il peggio?'},
+{fr:['Je vais mieux comprendre','Anxiété croissante + réactions basées sur suppositions','Rien — juste ma façon de penser'],
+en:['I\'ll understand better','Growing anxiety + assumption-based reactions','Nothing — just how I think'],
+ro:['Voi înțelege mai bine','Anxietate + reacții din presupuneri','Nimic'],
+ru:['Лучше пойму','Нарастающая тревога + реакции','Ничего'],
+it:['Capirò meglio','Ansia crescente + reazioni','Niente']},1,
+{fr:['Illusion — imagination ≠ données réelles','Correct — catastrophisme crée réalité déformée ✓','Minimise l\'impact comportemental'],
+en:['Illusion','Correct ✓','Minimizes impact'],
+ro:['Iluzie','Corect ✓','Minimizează impactul'],
+ru:['Иллюзия','Верно ✓','Минимизирует влияние'],
+it:['Illusione','Corretto ✓','Minimizza']}),
+I:st({fr:'Pourquoi imagines-tu le pire?',en:'Why imagine the worst?',ro:'De ce imaginezi cel mai rău?',ru:'Почему воображаешь худшее?',it:'Perché immagini il peggio?'},
+{fr:['Parce que c\'est probablement la réalité','Mécanisme de protection — cerveau anticipe la douleur','Je suis juste réaliste'],
+en:['Because it\'s probably happening','Protection mechanism — brain anticipates pain','Just being realistic'],
+ro:['Probabil asta e realitatea','Mecanism de protecție','Sunt realist/ă'],
+ru:['Вероятно это происходит','Защитный механизм','Я просто реалист'],
+it:['Probabilmente sta succedendo','Meccanismo di protezione','Sono realistico/a']},1,
+{fr:['Supposition sans données','Exact — anxiété d\'attachement crée scénarios ✓','Réalisme exige des données'],
+en:['Assumption without data','Correct ✓','Realism needs data'],
+ro:['Presupunere fără date','Corect ✓','Realismul necesită date'],
+ru:['Предположение без данных','Верно ✓','Реализм требует данных'],
+it:['Assunzione senza dati','Corretto ✓','Il realismo richiede dati']}),
+A:st({fr:'Meilleure action?',en:'Best action?',ro:'Cea mai bună acțiune?',ru:'Лучшее действие?',it:'Migliore azione?'},
+{fr:['Attendre en silence','Dire : "J\'ai remarqué que tu sembles préoccupé(e), tout va bien ?"','Forcer une conversation'],
+en:['Wait in silence','"I noticed you seem preoccupied, is everything okay?"','Force a conversation'],
+ro:['Aștepți în tăcere','"Am observat că pari preocupat/ă, totul e bine?"','Forțezi o conversație'],
+ru:['Молча ждать','"Я заметил что ты кажешься озабоченным. Всё хорошо?"','Форсировать разговор'],
+it:['Aspettare in silenzio','"Ho notato che sembri preoccupato/a, va tutto bene?"','Forzare una conversazione']},1,
+{fr:['Passif — distance et anxiété grandissent','Ouvert, doux, sans suppositions — idéal ✓','Crée pression — peut aggraver'],
+en:['Passive','Open, gentle, no assumptions ✓','Creates pressure'],
+ro:['Pasiv','Deschis, blând, fără presupuneri ✓','Creează presiune'],
+ru:['Пассивно','Открыто, мягко, без предположений ✓','Создаёт давление'],
+it:['Passivo','Aperto, gentile, senza supposizioni ✓','Crea pressione']})},
+{fr:'L\'anxiété d\'attachement fabrique des histoires à partir du silence. La seule donnée réelle est le comportement observé. Le reste est de la construction mentale.',
+en:'Attachment anxiety fabricates stories from silence. The only real data is observed behavior. The rest is mental construction.',
+ro:'Anxietatea de atașament fabrică povești din tăcere. Singurele date reale sunt comportamentele observate.',
+ru:'Тревога привязанности создаёт истории из тишины. Единственные реальные данные — наблюдаемое поведение. Остальное — умственная конструкция.',
+it:'L\'ansia da attaccamento fabbrica storie dal silenzio. Gli unici dati reali sono i comportamenti osservati. Il resto è costruzione mentale.'}),
+
+s(5,{fr:'FINANCE',en:'FINANCE',ro:'FINANȚE',ru:'ФИНАНСЫ',it:'FINANZA'},
+{fr:'Un ami te propose un investissement "garanti" avec 30% de retour en 3 mois. Il semble convaincu. Plusieurs ont déjà investi.',
+en:'A friend pitches a "guaranteed" investment: 30% in 3 months. He seems convinced. Others have invested.',
+ro:'Prieten: investiție "garantată", 30% în 3 luni. Pare convins. Alții au investit deja.',
+ru:'Друг предлагает "гарантированную" инвестицию: 30% за 3 месяца. Убеждён. Другие вложились.',
+it:'Amico: investimento "garantito", 30% in 3 mesi. Sembra convinto. Altri hanno già investito.'},
+{S:st({fr:'Quelle est la vraie situation?',en:'Real situation?',ro:'Situația reală?',ru:'Реальная ситуация?',it:'Situazione reale?'},
+{fr:['Vraie opportunité — mon ami est honnête','Rendement anormal + garantie + pression sociale = signaux de fraude','Peut-être légit, faire confiance'],
+en:['Real opportunity — friend is honest','Abnormal return + guarantee + pressure = fraud red flags','Maybe legit, trust him'],
+ro:['Oportunitate reală','Randament anormal + garanție + presiune = semne de fraudă','Poate e legit'],
+ru:['Реальная возможность','Ненормальный доход + гарантия + давление = признаки мошенничества','Может легитимно'],
+it:['Vera opportunità','Rendimento anomalo + garanzia + pressione = segnali frode','Forse legittimo']},1,
+{fr:['Biais d\'affinité — confiance ≠ analyse','Lecture correcte — ces 3 éléments = structure de fraude classique ✓','Délégation du jugement'],
+en:['Affinity bias','Correct — these 3 = classic fraud structure ✓','Judgment delegation'],
+ro:['Prejudecată de afinitate','Lectură corectă ✓','Delegarea judecății'],
+ru:['Предвзятость симпатии','Верное восприятие ✓','Делегирование суждения'],
+it:['Bias affinità','Lettura corretta ✓','Delega del giudizio']}),
+O:st({fr:'Quelles options?',en:'Options?',ro:'Opțiuni?',ru:'Варианты?',it:'Opzioni?'},
+{fr:['Investir — mon ami ne me ferait pas de mal','Refuser pour ne pas risquer','Demander documentation légale + recherches indépendantes'],
+en:['Invest — friend wouldn\'t hurt me','Refuse to avoid risk','Ask for legal docs + independent research'],
+ro:['Investesc','Refuz','Cer documentele legale + cercetări independente'],
+ru:['Инвестировать','Отказаться','Запросить документы + независимое исследование'],
+it:['Investire','Rifiutare','Chiedere documenti legali + ricerca indipendente']},2,
+{fr:['Biais d\'affinité — arnaques ciblent les amis','Trop restrictif — peut-être vraie occasion','Optimal — vraie opportunité = supporte l\'analyse ✓'],
+en:['Affinity bias','Too restrictive','Optimal ✓'],
+ro:['Prejudecată de afinitate','Prea restrictiv','Optimal ✓'],
+ru:['Предвзятость симпатии','Слишком ограничительно','Оптимально ✓'],
+it:['Bias affinità','Troppo restrittivo','Ottimale ✓']}),
+F:st({fr:'Qu\'est-ce qui va probablement arriver?',en:'What will probably happen?',ro:'Ce se va întâmpla?',ru:'Что вероятно?',it:'Cosa accadrà?'},
+{fr:['Je vais gagner 30%','Si c\'est un schéma Ponzi — perds tout + la relation','Ne perdrai pas beaucoup même si faux'],
+en:['30% gain','If Ponzi scheme — lose everything + relationship','Won\'t lose much even if false'],
+ro:['Câștig 30%','Dacă e Ponzi — pierd totul + relația','Nu pierd mult'],
+ru:['Заработаю 30%','Если схема Понзи — потеряю всё + отношения','Немного потеряю'],
+it:['Guadagno 30%','Se Ponzi — perdo tutto + relazione','Non perdo molto']},1,
+{fr:['Optimisme non calibré','Correct — victimes Ponzi perdent argent ET relations ✓','Minimisation — souvent faux'],
+en:['Uncalibrated optimism','Correct ✓','Risk minimization'],
+ro:['Optimism necalibrat','Corect ✓','Minimizarea riscului'],
+ru:['Некалиброванный оптимизм','Верно ✓','Минимизация риска'],
+it:['Ottimismo non calibrato','Corretto ✓','Minimizzazione']}),
+I:st({fr:'Pourquoi cette "garantie" et urgence?',en:'Why this "guarantee" and urgency?',ro:'De ce garanție și urgență?',ru:'Зачем гарантия и срочность?',it:'Perché garanzia e urgenza?'},
+{fr:['L\'investissement est vraiment exceptionnel','Garantie + urgence éliminent l\'analyse — rôle dans toute fraude','Mon ami croit vraiment ce qu\'il dit'],
+en:['Investment is truly exceptional','Guarantee + urgency eliminate analysis — their role in fraud','Friend genuinely believes'],
+ro:['Investiția e excepțională','Garanția + urgența elimină analiza ✓','Prietenul chiar crede'],
+ru:['Инвестиция исключительна','Гарантия + срочность устраняют анализ ✓','Друг верит'],
+it:['L\'investimento è eccezionale','Garanzia + urgenza eliminano l\'analisi ✓','L\'amico crede davvero']},1,
+{fr:['Exceptionnel = rare et vérifiable','Exact — court-circuitent le jugement ✓','Vrai mais ne protège personne'],
+en:['Exceptional = rare and verifiable','Correct ✓','True but protects nobody'],
+ro:['Excepțional = verificabil','Corect ✓','Adevărat dar nu protejează'],
+ru:['Исключительно = редко и проверяемо','Верно ✓','Верно но не защищает'],
+it:['Eccezionale = verificabile','Corretto ✓','Vero ma non protegge']}),
+A:st({fr:'Meilleure action?',en:'Best action?',ro:'Cea mai bună acțiune?',ru:'Лучшее действие?',it:'Migliore azione?'},
+{fr:['Investir par confiance','Refuser brutalement','"Intéressé(e) ! Montre-moi les documents légaux + je consulte un conseiller indépendant"'],
+en:['Invest on trust','Refuse bluntly','"Interested! Show me legal docs + I\'ll consult an independent advisor"'],
+ro:['Investesc pe baza încrederii','Refuz brutal','"Interesat/ă! Documentele legale + consultez un consilier independent"'],
+ru:['Инвестировать на доверии','Резко отказать','"Интересно! Покажи документы + проконсультируюсь с независимым советником"'],
+it:['Investire sulla fiducia','Rifiutare bruscamente','"Interessato/a! Mostrami documenti + consulto un consulente indipendente"']},2,
+{fr:['Biais d\'affinité — dangereux','Préserve argent mais abîme la relation','Parfait — intérêt + cadre + indépendance ✓'],
+en:['Affinity bias — dangerous','Protects money but damages relation','Perfect ✓'],
+ro:['Prejudecată — periculos','Protejează banii dar strică relația','Perfect ✓'],
+ru:['Предвзятость — опасно','Защищает деньги но вредит отношениям','Отлично ✓'],
+it:['Bias — pericoloso','Protegge soldi ma danneggia relazione','Perfetto ✓']})},
+{fr:'Une vraie opportunité financière supporte toujours l\'analyse indépendante. Quand la garantie et l\'urgence remplacent l\'analyse — c\'est le signal le plus fiable d\'une fraude.',
+en:'A real financial opportunity always supports independent analysis. When guarantee and urgency replace analysis — that\'s the most reliable signal of fraud.',
+ro:'O oportunitate financiară reală suportă analiza independentă. Când garanția și urgența înlocuiesc analiza — e cel mai fiabil semnal de fraudă.',
+ru:'Реальная финансовая возможность выдерживает независимый анализ. Когда гарантия и срочность заменяют анализ — это самый надёжный сигнал мошенничества.',
+it:'Una vera opportunità finanziaria supporta sempre l\'analisi indipendente. Quando garanzia e urgenza sostituiscono l\'analisi — è il segnale più affidabile di frode.'}),
+
+s(6,{fr:'LEADERSHIP',en:'LEADERSHIP',ro:'LEADERSHIP',ru:'ЛИДЕРСТВО',it:'LEADERSHIP'},
+{fr:'Tu manages une équipe. Un membre très performant se plaint constamment des autres. L\'équipe commence à éviter cette personne.',
+en:'You manage a team. A top performer constantly complains about others. The team starts avoiding them.',
+ro:'Conduci o echipă. Un performer se plânge constant. Echipa îl/o evită.',
+ru:'Ты управляешь командой. Высокоэффективный сотрудник постоянно жалуется. Команда его избегает.',
+it:'Gestisci un team. Un top performer si lamenta costantemente. Il team lo evita.'},
+{S:st({fr:'Quelle est la vraie situation?',en:'Real situation?',ro:'Situația reală?',ru:'Реальная ситуация?',it:'Situazione reale?'},
+{fr:['Un performant qui a raison dans ses critiques','Tension entre performance individuelle et dynamique d\'équipe','Un problème de personnalité à gérer'],
+en:['High performer who\'s right','Tension between individual performance and team dynamics','Personality problem to manage'],
+ro:['Un performer care are dreptate','Tensiune performanță vs dinamică echipă','Problemă de personalitate'],
+ru:['Высокоэффективный кто прав','Напряжение между эффективностью и динамикой','Проблема личности'],
+it:['Alto performer che ha ragione','Tensione tra performance e dinamiche team','Problema di personalità']},1,
+{fr:['Partiel — critiques peuvent être justes ET destructrices','Vue systémique — vraie situation ✓','Réducteur'],
+en:['Partial — criticisms can be right AND destructive','Systemic view ✓','Reductive'],
+ro:['Parțial','Vedere sistemică ✓','Reducționist'],
+ru:['Частично','Системный взгляд ✓','Упрощённо'],
+it:['Parziale','Visione sistemica ✓','Riduttivo']}),
+O:st({fr:'Quelles options?',en:'Options?',ro:'Opțiuni?',ru:'Варианты?',it:'Opzioni?'},
+{fr:['Ignorer — il/elle performe bien','Parler à l\'équipe pour comprendre l\'impact','Donner un avertissement formel'],
+en:['Ignore — person performs well','Talk to team to understand impact','Give formal warning'],
+ro:['Ignoră','Discuți cu echipa','Dai avertisment formal'],
+ru:['Игнорировать','Поговорить с командой','Официальное предупреждение'],
+it:['Ignorare','Parlare con il team','Avvertimento formale']},1,
+{fr:['Aveugle au coût systémique','Diagnostic avant intervention ✓','Prématuré'],
+en:['Blind to systemic cost','Diagnose before intervening ✓','Premature'],
+ro:['Orb la costul sistemic','Diagnostichezi înainte ✓','Prematur'],
+ru:['Слеп к системным издержкам','Диагностируй сначала ✓','Преждевременно'],
+it:['Cieco al costo sistemico','Diagnosticare prima ✓','Prematuro']}),
+F:st({fr:'Si tu ignores?',en:'If you ignore?',ro:'Dacă ignori?',ru:'Если игнорировать?',it:'Se ignori?'},
+{fr:['La situation se calme d\'elle-même','Érosion de la cohésion + départs potentiels','Un avertissement règle tout'],
+en:['It will calm down on its own','Cohesion erosion + potential departures','One warning fixes everything'],
+ro:['Se calmează','Eroziune coeziune + plecări','Un avertisment rezolvă'],
+ru:['Успокоится само','Эрозия сплочённости + увольнения','Одно предупреждение исправит'],
+it:['Si calmerà da sola','Erosione coesione + partenze','Un avvertimento risolve tutto']},1,
+{fr:['Conflits de dynamique rarement se résolvent seuls','Correct — performants toxiques détruisent les équipes ✓','Simplifie'],
+en:['Rarely resolve alone','Correct — toxic high performers destroy teams ✓','Oversimplifies'],
+ro:['Rar se rezolvă singure','Corect ✓','Simplifică'],
+ru:['Редко решаются сами','Верно ✓','Упрощает'],
+it:['Raramente si risolvono','Corretto ✓','Semplifica']}),
+I:st({fr:'Pourquoi se plaint-il/elle?',en:'Why do they complain?',ro:'De ce se plânge?',ru:'Почему жалуется?',it:'Perché si lamenta?'},
+{fr:['Il/elle a raison — les autres sont mauvais','Besoin de reconnaissance + frustration + manque de challenge','Mauvaise personnalité'],
+en:['They\'re right — others are bad','Need recognition + frustration + under-challenged','Bad personality'],
+ro:['Are dreptate','Nevoie de recunoaștere + frustrare','Personalitate proastă'],
+ru:['Прав(а) — другие плохи','Потребность в признании + фрустрация','Плохая личность'],
+it:['Ha ragione','Bisogno di riconoscimento + frustrazione','Personalità difficile']},1,
+{fr:['Réducteur — ne génère pas de solution','Contexte comportemental — génère des leviers ✓','Déresponsabilise'],
+en:['Reductive — generates no solution','Behavioral context — generates levers ✓','Removes responsibility'],
+ro:['Reducționist','Context comportamental ✓','Deresponsabilizează'],
+ru:['Упрощённо','Поведенческий контекст ✓','Снимает ответственность'],
+it:['Riduttivo','Contesto comportamentale ✓','Rimuove responsabilità']}),
+A:st({fr:'Meilleure action?',en:'Best action?',ro:'Cea mai bună acțiune?',ru:'Лучшее действие?',it:'Migliore azione?'},
+{fr:['Ignorer jusqu\'aux résultats chiffrés','Conversation individuelle : nommer l\'impact + explorer le "pourquoi" ensemble','Ultimatum immédiat'],
+en:['Ignore until metrics suffer','One-on-one: name the impact + explore the "why" together','Immediate ultimatum'],
+ro:['Ignoră până la rezultate','Conversație unu-la-unu: numești impactul + explorezi "de ce"','Ultimatum imediat'],
+ru:['Игнорировать пока не затронет метрики','Разговор: назвать влияние + исследовать "почему"','Немедленный ультиматум'],
+it:['Ignorare fino ai risultati','Colloquio individuale: nominare impatto + esplorare il "perché"','Ultimatum immediato']},1,
+{fr:['Trop tardif — dommages déjà faits','Intervention ciblée, humaine et stratégique ✓','Crée défense — ferme le dialogue'],
+en:['Too late — damage done','Targeted human strategic intervention ✓','Creates defensiveness'],
+ro:['Prea târziu','Intervenție țintită și strategică ✓','Creează defensivă'],
+ru:['Слишком поздно','Целенаправленное вмешательство ✓','Создаёт защиту'],
+it:['Troppo tardi','Intervento mirato e strategico ✓','Crea difensività']})},
+{fr:'Un haut performer toxique coûte plus qu\'il ne rapporte — pas en chiffres mais en cohésion. Le vrai leadership agit sur le système, pas sur les symptômes.',
+en:'A toxic high performer costs more than they contribute — not in numbers but in cohesion. Real leadership acts on the system, not symptoms.',
+ro:'Un performer toxic costă mai mult decât aduce — în coeziune. Adevăratul leadership acționează asupra sistemului.',
+ru:'Токсичный высокоэффективный сотрудник стоит больше чем приносит — в сплочённости. Настоящее лидерство действует на систему.',
+it:'Un alto performer tossico costa più di quanto contribuisce — in coesione. La vera leadership agisce sul sistema.'}),
+
+s(7,{fr:'SANTÉ',en:'HEALTH',ro:'SĂNĂTATE',ru:'ЗДОРОВЬЕ',it:'SALUTE'},
+{fr:'Tu te sens épuisé(e) depuis des semaines. Tu fais quand même tout. Les autres semblent gérer sans problème.',
+en:'Exhausted for weeks. Still doing everything. Others seem to manage fine.',
+ro:'Epuizat/ă de săptămâni. Faci totuși totul. Ceilalți par să gestioneze bine.',
+ru:'Истощён(а) несколько недель. Всё равно делаешь всё. Другие справляются.',
+it:'Esausto/a da settimane. Fai comunque tutto. Gli altri sembrano gestire bene.'},
+{S:st({fr:'Quelle est la vraie situation?',en:'Real situation?',ro:'Situația reală?',ru:'Реальная ситуация?',it:'Situazione reale?'},
+{fr:['Je suis juste fatigué(e) — c\'est normal','Épuisement chronique + comparaison sociale + surengagement = signal de burnout','Les autres gèrent donc je dois aussi'],
+en:['Just tired — it\'s normal','Chronic exhaustion + social comparison + over-commitment = burnout signal','Others manage so I must too'],
+ro:['Sunt doar obosit/ă','Epuizare cronică + comparație + supra-angajament = semnal burnout','Alții gestionează deci și eu'],
+ru:['Просто устал(а)','Хроническое истощение + сравнение + обязательства = сигнал выгорания','Другие справляются'],
+it:['Solo stanco/a — è normale','Esaurimento cronico + confronto + eccessi = segnale burnout','Gli altri gestiscono quindi devo farlo']},1,
+{fr:['Minimisation — "juste fatigué" depuis des semaines est cliniquement significatif','Lecture complète — tu identifies les vrais marqueurs ✓','Comparaison sociale — les autres ont leurs propres luttes'],
+en:['Minimization — weeks = clinically significant','Complete reading ✓','Social comparison — others have struggles too'],
+ro:['Minimizare','Lectură completă ✓','Comparație socială'],
+ru:['Минимизация','Полное восприятие ✓','Социальное сравнение'],
+it:['Minimizzazione','Lettura completa ✓','Confronto sociale']}),
+O:st({fr:'Quelles options?',en:'Options?',ro:'Opțiuni?',ru:'Варианты?',it:'Opzioni?'},
+{fr:['Continuer — les autres comptent sur toi','Identifier et réduire 1-2 engagements non-essentiels cette semaine','Tout abandonner pour te reposer'],
+en:['Continue — others depend on you','Identify and reduce 1-2 non-essentials this week','Drop everything to rest'],
+ro:['Continuă','Identifică și reduce 1-2 angajamente ne-esențiale','Abandonează totul'],
+ru:['Продолжать','Сократить 1-2 несущественных обязательства','Бросить всё'],
+it:['Continuare','Ridurre 1-2 impegni non essenziali questa settimana','Abbandonare tutto']},1,
+{fr:['Martyre — énergie = ressource limitée','Intervention progressive et faisable ✓','Extrême — crée plus de stress'],
+en:['Martyrdom — energy is limited','Progressive intervention ✓','Extreme — creates more stress'],
+ro:['Martiriu','Intervenție progresivă ✓','Extrem'],
+ru:['Мученичество','Постепенное вмешательство ✓','Крайность'],
+it:['Martirio','Intervento progressivo ✓','Estremo']}),
+F:st({fr:'Si tu continues sans changer?',en:'If you continue without change?',ro:'Dacă continui fără schimbare?',ru:'Если продолжать без изменений?',it:'Se continui senza cambiare?'},
+{fr:['Je vais m\'adapter — le corps s\'habitue','Burnout complet + impact sur la santé physique et mentale','Les choses vont naturellement se calmer'],
+en:['I\'ll adapt — body adjusts','Complete burnout + health impact','Things will calm naturally'],
+ro:['Mă voi adapta','Burnout complet + impact sănătate','Lucrurile se vor calma'],
+ru:['Адаптируюсь','Полное выгорание + влияние на здоровье','Всё успокоится'],
+it:['Mi adatterò','Burnout completo + impatto salute','Le cose si calmeranno']},1,
+{fr:['Faux — épuisement chronique est cumulatif','Correct — burnout suit un arc prévisible sans intervention ✓','Pensée magique'],
+en:['False — chronic exhaustion is cumulative','Correct ✓','Magical thinking'],
+ro:['Fals','Corect ✓','Gândire magică'],
+ru:['Ложно','Верно ✓','Магическое мышление'],
+it:['Falso','Corretto ✓','Pensiero magico']}),
+I:st({fr:'Pourquoi continues-tu malgré l\'épuisement?',en:'Why continue despite exhaustion?',ro:'De ce continui în ciuda epuizării?',ru:'Почему продолжаешь несмотря на истощение?',it:'Perché continui nonostante l\'esaurimento?'},
+{fr:['Parce que j\'ai vraiment autant de responsabilités','Peur de décevoir + identité liée à la productivité + difficulté à déléguer','Parce que c\'est la bonne chose à faire'],
+en:['Because I genuinely have that many responsibilities','Fear of disappointing + identity tied to productivity + difficulty delegating','Because it\'s the right thing'],
+ro:['Responsabilități reale','Frică de a dezamăgi + identitate + dificultate să delegi','E corect'],
+ru:['Реальных обязательств столько','Страх разочаровать + идентичность + трудность делегирования','Это правильно'],
+it:['Ho davvero tante responsabilità','Paura di deludere + identità + difficoltà a delegare','Perché è giusto']},1,
+{fr:['Partiel — certaines perçues obligatoires sans l\'être','Exact — vrais moteurs du surengagement ✓','Moteur moral — pas une analyse'],
+en:['Partial','Correct — real drivers of over-commitment ✓','Moral driver — not analysis'],
+ro:['Parțial','Corect ✓','Motor moral'],
+ru:['Частично','Верно ✓','Моральный движитель'],
+it:['Parziale','Corretto ✓','Motore morale']}),
+A:st({fr:'Meilleure action?',en:'Best action?',ro:'Cea mai bună acțiune?',ru:'Лучшее действие?',it:'Migliore azione?'},
+{fr:['Tenir encore — ça va s\'arranger','Identifier 1 engagement à réduire cette semaine + consulter un médecin si ça dure','Attendre les vacances pour récupérer'],
+en:['Hold on — it\'ll get better','Reduce 1 commitment + see a doctor if it persists','Wait for vacation to recover'],
+ro:['Rezistă','Reduce 1 angajament + consultă medic dacă persistă','Așteaptă vacanța'],
+ru:['Держаться','Сократить 1 обязательство + обратиться к врачу','Ждать отпуска'],
+it:['Resistere','Ridurre 1 impegno + consultare un medico se persiste','Aspettare le vacanze']},1,
+{fr:['Stoïcisme non fonctionnel — aggrave','Intervention immédiate + aide professionnelle si nécessaire ✓','Les vacances en bout de tunnel suffisent rarement'],
+en:['Non-functional stoicism','Immediate intervention + professional support if needed ✓','Vacation rarely suffices'],
+ro:['Stoicism non-funcțional','Intervenție imediată ✓','Vacanța rar e suficientă'],
+ru:['Нефункциональный стоицизм','Немедленное вмешательство ✓','Отпуск редко достаточен'],
+it:['Stoicismo non funzionale','Intervento immediato ✓','Le vacanze raramente bastano']})},
+{fr:'L\'épuisement chronique n\'est pas un manque de volonté — c\'est un manque de ressources. Prendre soin de toi n\'est pas de l\'égoïsme, c\'est la condition pour prendre soin des autres.',
+en:'Chronic exhaustion is not lack of willpower — it\'s lack of resources. Taking care of yourself is not selfish, it\'s the condition for caring for others.',
+ro:'Epuizarea cronică nu e lipsă de voință — e lipsă de resurse. A te îngriji nu e egoism, e condiția de a îngriji pe alții.',
+ru:'Хроническое истощение — не недостаток силы воли, а ресурсов. Забота о себе — не эгоизм, это условие для заботы о других.',
+it:'L\'esaurimento cronico non è mancanza di forza di volontà — è di risorse. Prendersi cura di sé non è egoismo, è la condizione per prendersi cura degli altri.'}),
+
+s(8,{fr:'PARENTALITÉ',en:'PARENTING',ro:'PARENTING',ru:'РОДИТЕЛЬСТВО',it:'GENITORIALITÀ'},
+{fr:'Ton enfant (12 ans) ment sur ses notes. Tu découvres qu\'il/elle est en difficulté depuis 2 mois sans te le dire.',
+en:'Your child (12) has been lying about grades. They\'ve struggled 2 months without telling you.',
+ro:'Copilul (12 ani) minte despre note de 2 luni fără să îți spună.',
+ru:'Ребёнок (12 лет) 2 месяца лжёт об оценках, не говоря тебе.',
+it:'Figlio/a (12 anni) mente sui voti da 2 mesi senza dirtelo.'},
+{S:st({fr:'Quelle est la vraie situation?',en:'Real situation?',ro:'Situația reală?',ru:'Реальная ситуация?',it:'Situazione reale?'},
+{fr:['Mon enfant est malhonnête — doit être puni','Enfant en difficulté + peur de décevoir + dissimulation = signal d\'aide','Il/elle m\'a manqué de respect'],
+en:['Child is dishonest — needs punishment','Child struggling + fear of disappointing + concealment = call for help','Disrespected me'],
+ro:['Copilul e necinstit','Copil în dificultate + frică + ascundere = semnal de ajutor','Lipsă de respect'],
+ru:['Ребёнок нечестен','Ребёнок испытывает трудности + страх + скрытие = сигнал помощи','Неуважение'],
+it:['Il bambino è disonesto','Bambino in difficoltà + paura + dissimulazione = richiesta d\'aiuto','Mancanza di rispetto']},1,
+{fr:['Focalise sur le comportement — rate la cause','Vision systémique et bienveillante ✓','Focalise sur toi — pas sur l\'enfant'],
+en:['Focuses on behavior — misses cause','Systemic caring vision ✓','Focuses on you — not child'],
+ro:['Se concentrează pe comportament','Viziune sistemică ✓','Se concentrează pe tine'],
+ru:['Фокус на поведении','Системный взгляд ✓','Фокус на себе'],
+it:['Si concentra sul comportamento','Visione sistemica ✓','Si concentra su di te']}),
+O:st({fr:'Quelles options?',en:'Options?',ro:'Opțiuni?',ru:'Варианты?',it:'Opzioni?'},
+{fr:['Punir sévèrement pour que ça ne recommence plus','Créer un espace de dialogue sûr — comprendre le "pourquoi" d\'abord','Ignorer — les enfants traversent des phases'],
+en:['Punish severely so it doesn\'t happen again','Create safe dialogue — understand the "why" first','Ignore — kids go through phases'],
+ro:['Pedepsești sever','Creezi spațiu de dialog sigur — "de ce" mai întâi','Ignoră'],
+ru:['Строго наказать','Создать безопасный диалог — сначала понять "почему"','Игнорировать'],
+it:['Punire severamente','Creare dialogo sicuro — capire il "perché" prima','Ignorare']},1,
+{fr:['Punition seule enseigne à mieux cacher','Diagnostic relationnel avant punition ✓','Passif — problème scolaire reste'],
+en:['Punishment alone teaches better hiding','Relational diagnosis first ✓','Passive — academic problem stays'],
+ro:['Pedeapsa singură','Diagnostic relațional mai întâi ✓','Pasiv'],
+ru:['Наказание учит лучше скрывать','Реляционная диагностика сначала ✓','Пассивно'],
+it:['La punizione insegna a nascondere meglio','Diagnosi relazionale prima ✓','Passivo']}),
+F:st({fr:'Si tu réagis avec colère d\'abord?',en:'If you react with anger first?',ro:'Dacă reacționezi cu furie mai întâi?',ru:'Если сначала реагировать гневом?',it:'Se reagisci con rabbia prima?'},
+{fr:['L\'enfant va comprendre et changer','L\'enfant va se fermer — la prochaine fois cachera mieux','L\'enfant va s\'excuser et tout ira bien'],
+en:['Child will understand and change','Child will close off — hide better next time','Child will apologize and all will be fine'],
+ro:['Copilul va înțelege și se va schimba','Copilul se va închide — va ascunde mai bine','Copilul se va scuza'],
+ru:['Ребёнок поймёт и изменится','Ребёнок закроется — в следующий раз спрячет лучше','Ребёнок извинится'],
+it:['Il bambino capirà e cambierà','Si chiuderà — la prossima volta nasconderà meglio','Si scuserà']},1,
+{fr:['Peur peut induire conformité superficielle','Correct — colère parentale ferme la communication ✓','Optimiste — cause profonde non traitée'],
+en:['Fear induces superficial compliance','Correct ✓','Optimistic — root cause untreated'],
+ro:['Frica induce conformitate superficială','Corect ✓','Optimist'],
+ru:['Страх вызывает поверхностное согласие','Верно ✓','Оптимистично'],
+it:['La paura induce conformità superficiale','Corretto ✓','Ottimistico']}),
+I:st({fr:'Pourquoi l\'enfant a-t-il caché?',en:'Why did child hide it?',ro:'De ce a ascuns copilul?',ru:'Почему ребёнок скрывал?',it:'Perché il bambino ha nascosto?'},
+{fr:['Parce qu\'il/elle est malhonnête par nature','Peur de décevoir + peur de la réaction + honte — tous normaux à 12 ans','Pour manipuler ses parents'],
+en:['Inherently dishonest','Fear of disappointing + reaction + shame — all normal at 12','To manipulate parents'],
+ro:['E necinstit/ă prin natură','Frică de dezamăgire + reacție + rușine — normale la 12 ani','Să manipuleze'],
+ru:['По природе нечестен','Страх разочаровать + реакции + стыд — нормально в 12 лет','Чтобы манипулировать'],
+it:['Intrinsecamente disonesto','Paura di deludere + reazione + vergogna — normale a 12 anni','Per manipolare']},1,
+{fr:['Étiquette — ferme compréhension et solution','Exact — ces 3 moteurs expliquent 90% des dissimulations ✓','Excès de sophistication — rare à 12 ans'],
+en:['Label — closes understanding','Correct ✓','Over-sophisticated — rare at 12'],
+ro:['Etichetare','Corect ✓','Prea sofisticat'],
+ru:['Ярлык','Верно ✓','Слишком изощрённо'],
+it:['Etichetta','Corretto ✓','Troppo sofisticato']}),
+A:st({fr:'Meilleure action?',en:'Best action?',ro:'Cea mai bună acțiune?',ru:'Лучшее действие?',it:'Migliore azione?'},
+{fr:['Punir d\'abord, discuter après','Dire : "Content(e) qu\'on le sache. Comment je peux t\'aider ?" puis trouver le soutien ensemble','Ignorer les notes et juste restaurer la confiance'],
+en:['Punish first, talk later','"Glad we know now. How can I help you?" then find support together','Ignore grades, just restore trust'],
+ro:['Pedepsești mai întâi, discuți după','"Mă bucur că știm. Cum te pot ajuta?" apoi găsești suport împreună','Ignoră notele'],
+ru:['Сначала наказать','Сказать: "Рад что знаем. Как помочь?" потом вместе найти поддержку','Игнорировать оценки'],
+it:['Punire prima, parlare dopo','"Contento/a che lo sappiamo. Come posso aiutarti?" poi trovare supporto insieme','Ignorare i voti']},1,
+{fr:['Séquence inversée — punition ferme le dialogue','Validation + orientation solution + coopération — parfait ✓','Partiel — problème scolaire reste non résolu'],
+en:['Reversed sequence — punishment closes dialogue','Validation + solution + cooperation — perfect ✓','Partial — academic problem stays'],
+ro:['Secvență inversată','Validare + soluție + cooperare — perfect ✓','Parțial'],
+ru:['Обратная последовательность','Валидация + решение + сотрудничество — отлично ✓','Частично'],
+it:['Sequenza invertita','Validazione + soluzione + cooperazione — perfetto ✓','Parziale']})},
+{fr:'L\'enfant ne ment pas contre toi — il/elle essaie de gérer une situation qui le/la dépasse. Ta réaction détermine s\'il/elle reviendra vers toi la prochaine fois.',
+en:'The child doesn\'t lie against you — they try to manage a situation that overwhelms them. Your reaction determines whether they\'ll come to you next time.',
+ro:'Copilul nu minte împotriva ta — încearcă să gestioneze o situație care îl/o depășește. Reacția ta determină dacă va veni la tine data viitoare.',
+ru:'Ребёнок не лжёт против тебя — пытается справиться с ситуацией которая превышает его возможности. Твоя реакция определяет придут ли к тебе в следующий раз.',
+it:'Il bambino non mente contro di te — cerca di gestire una situazione che lo sopraffà. La tua reazione determina se verrà da te la prossima volta.'})
+];
+
+// ══ STATE ══════════════════════════════════════════════════════
+let lang='fr',selDom=null,curSc=null,curStep=0,ans={},lastScore=0,lastLv='',isChallenge=false;
+let G={scores:[],domains:{},badges:[],streak:0,lastDay:null};
+try{const d=localStorage.getItem('sofia4');if(d)G=Object.assign(G,JSON.parse(d));}catch(e){}
+function save(){try{localStorage.setItem('sofia4',JSON.stringify(G));}catch(e){}}
+function t(k){return TX[lang][k]||'';}
+function toast(m){const el=document.getElementById('toast');el.textContent=m;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2200);}
+function doms(){return[...new Set(SC.map(x=>x.domain[lang]))];}
+function pool(){return selDom?SC.filter(x=>x.domain[lang]===selDom):SC;}
+function seed(){const d=new Date();return d.getFullYear()*10000+d.getMonth()*100+d.getDate();}
+function seededR(s){let x=Math.sin(s)*10000;return x-Math.floor(x);}
+function dailySc(){return SC[Math.floor(seededR(seed())*SC.length)];}
+function updateStreak(){
+  const today=new Date().toDateString();
+  if(G.lastDay===today)return;
+  const yest=new Date(Date.now()-86400000).toDateString();
+  G.streak=G.lastDay===yest?(G.streak||0)+1:1;
+  G.lastDay=today;save();
+}
+function checkBadges(score){
+  const earned=[];
+  const add=(id)=>{if(!G.badges.includes(id)){G.badges.push(id);earned.push(id);}};
+  if(G.scores.length>=1)add('first');
+  if(score>=80)add('s80');
+  if(score>=100)add('s100');
+  if((G.streak||0)>=3)add('str3');
+  if(doms().every(d=>G.domains[d]))add('all');
+  save();return earned;
+}
+
+// ══ LANG ══════════════════════════════════════════════════════
+function setLang(l){
+  lang=l;
+  document.querySelectorAll('.lb').forEach(b=>b.classList.toggle('active',b.textContent===l.toUpperCase()));
+  renderHome();
+  const active=document.querySelector('.screen.active')?.id?.split('-')[1];
+  if(active==='stats')renderStats();
+  else if(active==='contact')renderContact();
+  // update tab labels
+  const tabs=['tab-home','tab-stats','tab-contact'];
+  const tkeys=['tabs'];
+  tabs.forEach((id,i)=>{document.getElementById(id).textContent=TX[lang].tabs[i];});
+}
+
+// ══ TAB NAV ════════════════════════════════════════════════════
+function showTab(tab){
+  document.querySelectorAll('.nt').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+tab).classList.add('active');
+  if(tab==='home'){showScreen('home');renderHome();}
+  else if(tab==='stats'){showScreen('stats');renderStats();}
+  else if(tab==='contact'){showScreen('contact');renderContact();}
+}
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+id).classList.add('active');
+}
+function goHome(){showTab('home');}
+
+// ══ HOME ══════════════════════════════════════════════════════
+function renderHome(){
+  // Tab labels
+  ['home','stats','contact'].forEach((k,i)=>{document.getElementById('tab-'+k).textContent=TX[lang].tabs[i];});
+  document.getElementById('h-sub').textContent=t('sub');
+  // Sofia grid
+  document.getElementById('h-sofia').innerHTML=TX[lang].sofia.map(([l,w,d])=>`<div class="sr"><span class="sl">${l}</span><span class="sw">${w}</span><span class="sd">${d}</span></div>`).join('');
+  // Quick stats
+  const n=G.scores.length;
+  document.getElementById('qs-streak').textContent=(G.streak||0)+'🔥';
+  document.getElementById('qs-played').textContent=n;
+  document.getElementById('qs-best').textContent=n?Math.max(...G.scores):'—';
+  document.getElementById('qs-sl').textContent=t('streak');
+  document.getElementById('qs-pl').textContent=t('played');
+  document.getElementById('qs-bl').textContent=t('best');
+  // Badges
+  document.getElementById('h-bdg-lbl').textContent=t('bdgLbl');
+  renderBadges('h-badges');
+  // Daily challenge
+  document.getElementById('h-chal-title').textContent=t('chalTitle');
+  const ds=dailySc();
+  document.getElementById('h-chal-text').textContent=ds.text[lang].substring(0,90)+'…';
+  // Domain
+  document.getElementById('h-dom-lbl').textContent=t('domLbl');
+  const dg=document.getElementById('h-domains');
+  const dl=doms();
+  dg.innerHTML=`<div class="dc${!selDom?' sel':''}" onclick="selDomain(null)">${t('domAll')}</div>`
+    +dl.map(d=>`<div class="dc${selDom===d?' sel':''}" onclick="selDomain('${d}')">${d}</div>`).join('');
+  document.getElementById('h-btn-play').textContent=t('btnPlay');
+  document.getElementById('h-btn-rand').textContent=t('btnRand');
+}
+function selDomain(d){selDom=d;renderHome();}
+function renderBadges(cid){
+  const el=document.getElementById(cid);if(!el)return;
+  el.innerHTML=TX[lang].bdgs.map(b=>`<div class="badge ${G.badges.includes(b.id)?'unlocked':'locked'}" title="${b.desc}"><div class="badge-icon">${b.icon}</div><div class="badge-name">${b.name}</div></div>`).join('');
+}
+
+// ══ GAME ══════════════════════════════════════════════════════
+function startGame(){const p=pool();curSc=p[Math.floor(Math.random()*p.length)];isChallenge=false;launch();}
+function startRandom(){curSc=SC[Math.floor(Math.random()*SC.length)];isChallenge=false;launch();}
+function startChallenge(){curSc=dailySc();isChallenge=true;launch();}
+function launch(){curStep=0;ans={};renderGame();showScreen('game');}
+function renderGame(){
+  const sc=curSc,sk=L[curStep],sd=sc.steps[sk];
+  document.getElementById('g-tag').textContent=(isChallenge?'⚡ ':'')+sc.domain[lang];
+  document.getElementById('g-num').textContent=t('scOf')+' '+sc.id+' · '+t('stOf')+' '+(curStep+1)+'/5';
+  document.getElementById('g-text').textContent=sc.text[lang];
+  document.getElementById('g-prog').innerHTML=L.map((_,i)=>`<div class="ps${i<curStep?' done':i===curStep?' cur':''}"></div>`).join('');
+  document.getElementById('g-shd').textContent=sk+' — '+TX[lang].sn[sk].toUpperCase();
+  document.getElementById('g-sq').textContent=sd.q[lang];
+  document.getElementById('g-opts').innerHTML=sd.opts[lang].map((o,i)=>`<button class="opt${ans[sk]===i?' sel':''}" onclick="selOpt(${i})"><span class="opt-k">${String.fromCharCode(65+i)}</span><span>${o}</span></button>`).join('');
+  document.getElementById('g-next').textContent=t('btnNext');
+  document.getElementById('g-next').disabled=ans[sk]===undefined;
+}
+function selOpt(i){const k=L[curStep];ans[k]=i;document.querySelectorAll('.opt').forEach((b,idx)=>b.classList.toggle('sel',idx===i));document.getElementById('g-next').disabled=false;}
+function nextStep(){if(curStep<4){curStep++;renderGame();}else showResult();}
+
+// ══ RESULT ════════════════════════════════════════════════════
+function showResult(){
+  const sc=curSc;let total=0;
+  document.getElementById('r-lbl').textContent=t('rLbl');
+  const an=document.getElementById('r-an');an.innerHTML='';
+  L.forEach(k=>{
+    const corr=sc.steps[k].c,ua=ans[k],pts=ua===corr?20:0;total+=pts;
+    const ok=pts===20;
+    an.innerHTML+=`<div class="ar"><span class="al ${ok?'ok':'bad'}">${k}</span><span class="at">${sc.steps[k].an[lang][ua]||''}</span><span class="ap ${ok?'ok':'bad'}">${ok?'+20':'+0'}</span></div>`;
+  });
+  lastScore=total;
+  const lvi=total<40?0:total<60?1:total<80?2:total<100?3:4;
+  lastLv=TX[lang].lvs[lvi];
+  document.getElementById('r-score').textContent=total+'/100';
+  document.getElementById('r-lv').textContent=lastLv;
+  document.getElementById('r-ins').textContent=sc.insight[lang];
+  G.scores.push(total);if(G.scores.length>200)G.scores=G.scores.slice(-200);
+  const dom=sc.domain[lang];if(!G.domains[dom])G.domains[dom]=[];G.domains[dom].push(total);
+  updateStreak();
+  const nb=checkBadges(total);
+  const rb=document.getElementById('r-bdg'),rbc=document.getElementById('r-bdg-c');
+  const rbt=document.getElementById('r-bdg-t');
+  if(nb.length>0){rb.style.display='block';rbt.textContent=t('newBdg');const bd=TX[lang].bdgs.filter(b=>nb.includes(b.id));rbc.textContent=bd.map(b=>b.icon+' '+b.name).join(' · ');}
+  else rb.style.display='none';
+  document.getElementById('r-sh-lbl').textContent=t('shLbl');
+  document.getElementById('r-sh').innerHTML=`
+    <button class="sh-btn" onclick="shareResult('twitter')"><span class="sh-ic">𝕏</span><span>${t('shareX')}</span></button>
+    <button class="sh-btn" onclick="shareResult('facebook')"><span class="sh-ic">📘</span><span>${t('shareFB')}</span></button>
+    <button class="sh-btn" onclick="shareResult('copy')"><span class="sh-ic">🔗</span><span>${t('shareCopy')}</span></button>`;
+  document.getElementById('r-next').textContent=t('btnNextSc');
+  document.getElementById('r-home').textContent=t('btnHome');
+  // update quick stats on home too
+  const n=G.scores.length;
+  document.getElementById('qs-streak').textContent=(G.streak||0)+'🔥';
+  document.getElementById('qs-played').textContent=n;
+  document.getElementById('qs-best').textContent=Math.max(...G.scores);
+  showScreen('result');
+}
+function nextScenario(){
+  const p=pool();let n;do{n=p[Math.floor(Math.random()*p.length)];}while(n.id===curSc.id&&p.length>1);
+  curSc=n;curStep=0;ans={};renderGame();showScreen('game');
+}
+
+// ══ STATS ════════════════════════════════════════════════════
+function renderStats(){
+  document.getElementById('st-lbl').textContent=t('stLbl');
+  const n=G.scores.length,avg=n?Math.round(G.scores.reduce((a,b)=>a+b,0)/n):0;
+  document.getElementById('st-p').textContent=n;
+  document.getElementById('st-a').textContent=n?avg:'—';
+  document.getElementById('st-b').textContent=n?Math.max(...G.scores):'—';
+  document.getElementById('st-pl').textContent=t('played');
+  document.getElementById('st-al').textContent=t('avg');
+  document.getElementById('st-bl').textContent=t('best');
+  document.getElementById('st-dlbl').textContent=t('domByLbl');
+  document.getElementById('st-blbl').textContent=t('bdgLbl');
+  document.getElementById('st-reset').textContent=t('btnReset');
+  const dp=document.getElementById('st-doms');
+  const dl=Object.keys(G.domains);
+  if(!dl.length){dp.innerHTML=`<div style="font-size:11px;color:var(--txt3);letter-spacing:1px">${t('noStats')}</div>`;}
+  else{dp.innerHTML=dl.map(d=>{const a=G.domains[d],p=Math.round(a.reduce((x,y)=>x+y,0)/a.length);return`<div class="dom-row"><span class="dom-n">${d}</span><div class="dom-bg"><div class="dom-fill" style="width:${p}%"></div></div><span class="dom-pct">${p}%</span></div>`;}).join('');}
+  renderBadges('st-badges');
+}
+function resetStats(){
+  if(!confirm('Reset all stats?'))return;
+  G={scores:[],domains:{},badges:[],streak:0,lastDay:null};save();
+  renderStats();renderHome();toast(t('resetDone'));
+}
+
+// ══ CONTACT ══════════════════════════════════════════════════
+function renderContact(){
+  document.getElementById('ct-title').textContent=t('ctTitle');
+  document.getElementById('ct-sub').textContent=t('ctSub');
+  document.getElementById('ct-sp-t').textContent=t('spT');
+  document.getElementById('ct-sp-d').textContent=t('spD');
+  document.getElementById('ct-sp-p').textContent=t('spP');
+  document.getElementById('ct-sp-cta').textContent=t('spCta');
+  document.getElementById('ct-ll').textContent=t('llbl');
+  document.getElementById('ct-dt').textContent=t('dtlbl');
+  document.getElementById('ct-shl').textContent=t('shlbl');
+  document.getElementById('ct-sx').textContent=t('shareX');
+  document.getElementById('ct-sfb').textContent=t('shareFB');
+  document.getElementById('ct-sc').textContent=t('shareCopy');
+  document.getElementById('ct-copy').textContent=t('copy');
+}
+
+// ══ SHARE ════════════════════════════════════════════════════
+function shareResult(type){doShare(type,TX[lang].smsg(lastScore,lastLv));}
+function shareGame(type){doShare(type,TX[lang].sgmsg);}
+function doShare(type,msg){
+  if(type==='twitter')window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(msg),'_blank');
+  else if(type==='facebook')window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent('https://x.com/Vlad8Mir')+'&quote='+encodeURIComponent(msg),'_blank');
+  else{try{navigator.clipboard.writeText(msg).then(()=>toast(t('copied'))).catch(()=>toast(t('copied')));}catch(e){toast(t('copied'));}}
+}
+
+// ══ INIT ════════════════════════════════════════════════════
+renderHome();
+renderContact();
+</script>
+</body>
+</html>
